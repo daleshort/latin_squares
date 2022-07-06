@@ -16,11 +16,9 @@ class Square extends React.Component {
     //its not valid clear the value
     //(do we need to force the text in the text box to clear?)
     let text_received;
-    text_received = event.target.value;
+    text_received = event.target.value.charAt(event.target.value.length - 1);
 
-    if (
-      ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(text_received)
-    ) {
+    if (["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(text_received)) {
       this.setState({ value: text_received });
     } else if (text_received === "\n" || text_received === "\r") {
       console.log(text_received);
@@ -31,17 +29,11 @@ class Square extends React.Component {
     //  alert("you just typed" + text_received);
   }
 
-  //   handleSubmit(event) {
-  //     alert("A name was submitted: " + this.state.value);
-  //     event.preventDefault();
-  //   }
-
   handleOnClick = (event) => {
-    this.setState({ value: "" });
+    // this.setState({ value: "" });
   };
 
   handleSubmit = (event) => {
-    alert("you be submitting");
     event.preventDefault();
   };
 

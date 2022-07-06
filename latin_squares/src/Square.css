@@ -1,6 +1,5 @@
 .default-box {
-    border: 2px solid red;
-    border-radius: 4px;
+    border: 2px solid rgb(0, 0, 0);
     width:40px;
     height:40px;
     caret-color: transparent;
@@ -12,7 +11,7 @@
 
 
   .default-box:focus {
-    background-color: rgb(255, 0, 0);
+    background-color: rgba(0, 94, 255, 0.376);
   }
 
   /* .default-box:focus {
