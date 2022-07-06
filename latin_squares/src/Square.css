@@ -1,0 +1,20 @@
+.default-box {
+    border: 2px solid red;
+    border-radius: 4px;
+    width:40px;
+    height:40px;
+    caret-color: transparent;
+    text-align: center;
+    font-size: 20px;   
+    line-height:20px;
+    padding:0 5px;
+  }
+
+
+  .default-box:focus {
+    background-color: rgb(255, 0, 0);
+  }
+
+  /* .default-box:focus {
+      background-color: lightblue;
+  } */
