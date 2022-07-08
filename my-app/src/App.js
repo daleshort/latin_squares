@@ -21,6 +21,7 @@ class My_Button extends React.Component {
 
     this.state = { my_key: "", onClickFunction: null };
     this.onClick = this.onClick.bind(this);
+    //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
   }
 
   componentDidMount() {
