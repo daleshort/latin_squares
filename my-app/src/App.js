@@ -8,53 +8,20 @@ class square_data_class {
     const value = "";
     const id = "";
     const isSelected = false;
-  }
-
-  handleClick(i) {
-    console.log("click from a square:" + i);
-  }
-}
-
-class My_Button extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { my_key: "", onClickFunction: null };
-    this.onClick = this.onClick.bind(this);
-    //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
-  }
-
-  componentDidMount() {
-    this.setState({
-      my_key: this.props.my_key,
-      onClickFunction: this.props.onClickFunction,
-    });
-
-    console.log("component did mount:" + this.props.my_key);
-  }
-
-  onClick() {
-    console.log("click detected");
-
-    console.log("On click" + this.props.my_key);
-    console.log("key is" + this.props.my_key);
-    this.props.onClickFunction(this.props.my_key);
-  }
-
-  render() {
-    console.log("rendering" + this.props.my_key);
-    return (
-      <Button className="box-1" key={this.props.my_key} onClick={this.onClick}>
-        {this.props.my_key}
-      </Button>
-    );
+    const square_click_handler = null;
   }
 }
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { squares: [new square_data_class()], keypress: "" };
+    this.state = {
+      squares: new Array(16).fill(new square_data_class()),
+      keypress: "",
+      board_width: 4,
+    };
+    // this.state = { squares: [new square_data_class()], keypress: "", board_width: 4, };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   keydownHandler = (event) => {
@@ -63,13 +30,28 @@ class App extends React.Component {
     }
   };
 
-  componentDidMount() {
-    const copy_square = this.state.squares;
-    copy_square[0].value = "2";
-    copy_square[0].id = "2";
+  handleClick(i) {
+    console.log("click from a square:" + i);
+  }
 
-    this.setState({ squares: copy_square });
-    console.log("squares in mount:" + this.state.squares[0].value);
+  componentDidMount() {
+    // const copy_square = this.state.squares;
+    // copy_square[0].value = "2";
+    // copy_square[0].id = "2";
+    // copy_square[0].square_click_handler = this.handleClick;
+
+    // this.setState({ squares: copy_square });
+    // console.log("squares in mount:" + this.state.squares[0].value);
+
+    const copy_squares = this.state.squares; //copy entire square class array
+
+    for (let i = 0; i < this.state.board_width ** 2; i++) {
+      copy_squares[i].value = i;
+      copy_squares[i].id = i;
+      copy_squares[i].square_click_handler = this.handleClick;
+    }
+
+    this.setState({ squares: copy_squares });
 
     //capture keypress
     document.addEventListener("keydown", this.keydownHandler);
@@ -93,13 +75,46 @@ class App extends React.Component {
               return (
                 <My_Button
                   my_key={i}
-                  onClickFunction={this.state.squares[0].handleClick}
+                  onClickFunction={this.state.squares[0].square_click_handler}
                 />
               );
             })}
           </div>
         </header>
       </div>
+    );
+  }
+}
+class My_Button extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { my_key: "", onClickFunction: null };
+    this.onClick = this.onClick.bind(this);
+    //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
+  }
+
+  componentDidMount() {
+    this.setState({
+      my_key: this.props.my_key,
+      onClickFunction: this.props.onClickFunction,
+    });
+
+    console.log("component did mount:" + this.props.my_key);
+  }
+
+  onClick() {
+    //  console.log("click detected");
+    //  console.log("On click" + this.props.my_key);
+    //  console.log("key is" + this.props.my_key);
+    this.props.onClickFunction(this.props.my_key);
+  }
+
+  render() {
+    return (
+      <Button className="box-1" key={this.props.my_key} onClick={this.onClick}>
+        {this.props.my_key}
+      </Button>
     );
   }
 }
