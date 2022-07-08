@@ -126,7 +126,7 @@ ul {
   justify-content: space-between;
 }
 
-.box {
+.box-footer {
   flex: 1;
   background: #1c1d1e;
   color: #fff;
@@ -136,7 +136,7 @@ ul {
   padding: 15px 20px;
 }
 
-.box i {
+.box-footer i {
   margin-right: 10px;
 }
 

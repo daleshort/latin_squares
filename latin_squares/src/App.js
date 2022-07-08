@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Square from "./Square";
+import ReactDoku from "./ReactDoku";
 
 function App() {
   return (
@@ -25,18 +25,21 @@ function App() {
       <header class="header">
         <div class="container">
           <div>
-            <h1>Latin Square Sudoku</h1>
-            <p>A crazy game of Sudoku that I barely understand.</p>
+            <h1>ReactDoku</h1>
+            <p>
+              A crazy game of Latin Square Sudoku that I barely understand.
+              Built in React by James and Dale at The Recurse Center
+            </p>
           </div>
         </div>
         <div class="container" id="app">
-          <Square />
+          <ReactDoku board_width={4} />
         </div>
       </header>
 
       <section class="boxes">
         <div class="container">
-          <div class="box">
+          <div class="box-footer">
             <h2>
               <i class="fas fa-mobile"></i>How to play
             </h2>
