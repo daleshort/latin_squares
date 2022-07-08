@@ -13,6 +13,11 @@
   color: white;
 }
 
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 
 .container{
   /* width: 400px;

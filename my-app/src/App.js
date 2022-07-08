@@ -1,33 +1,85 @@
 import logo from "./logo.svg";
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+
+class square_data_class {
+  constructor() {
+    const value = "";
+    const id = "";
+    const isSelected = false;
+  }
+
+  handleClick(i) {
+    console.log("click from a square:" + i);
+  }
+}
+
+class My_Button extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { my_key: "", onClickFunction: null };
+    this.onClick = this.onClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      my_key: this.props.my_key,
+      onClickFunction: this.props.onClickFunction,
+    });
+
+    console.log("component did mount:" + this.props.my_key);
+  }
+
+  onClick() {
+    console.log("click detected");
+
+    console.log("On click" + this.props.my_key);
+    console.log("key is" + this.props.my_key);
+    this.props.onClickFunction(this.props.my_key);
+  }
+
+  render() {
+    console.log("rendering" + this.props.my_key);
+    return (
+      <Button className="box-1" key={this.props.my_key} onClick={this.onClick}>
+        {this.props.my_key}
+      </Button>
+    );
+  }
+}
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { squares: [new square_data_class()], keypress: "" };
   }
 
-  myCallBack() {
-    console.log("hey it's me, your first call back");
-  }
-
-  myPromise = new Promise((resolve, reject) => {
-    resolve(console.log("I'm a sucessful promise"));
-  });
+  keydownHandler = (event) => {
+    if ("1234567890".includes(event.key)) {
+      console.log("key press:" + event.key);
+    }
+  };
 
   componentDidMount() {
-    //simple callback
-    setTimeout(this.myCallBack, 2000);
+    const copy_square = this.state.squares;
+    copy_square[0].value = "2";
+    copy_square[0].id = "2";
 
-    //arrow function callback
-    setTimeout(() => {
-      console.log("hey I'm also a callback");
-    }, 3000);
+    this.setState({ squares: copy_square });
+    console.log("squares in mount:" + this.state.squares[0].value);
 
-    //promise
-    this.myPromise.then(() => {
-      console.log("I'm the second part of the promise");
-    });
+    //capture keypress
+    document.addEventListener("keydown", this.keydownHandler);
+  }
+
+  // componentWillUnmount() {
+  //   this.removeEventListener("keydown", this.keydownHandler);
+  // }
+
+  getSquare() {
+    return this.state.squares;
   }
 
   render() {
@@ -36,11 +88,12 @@ class App extends React.Component {
         <header className="App-header">
           <div className="container">
             {/* "I'm a looped element" */}
-            {Array.from({ length: 16 }, (x, i) => i).map(function (count) {
+            {Array.from({ length: 16 }, (x, i) => {
               return (
-                <div className="box-1" key={count}>
-                  {count}
-                </div>
+                <My_Button
+                  my_key={i}
+                  onClickFunction={this.state.squares[0].handleClick}
+                />
               );
             })}
           </div>
