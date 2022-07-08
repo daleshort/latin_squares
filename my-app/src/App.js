@@ -7,6 +7,8 @@ class square_data_class {
   constructor() {
     const value = "";
     const id = "";
+    const row = null;
+    const col = null;
     const isSelected = false;
     const square_click_handler = null;
   }
@@ -15,8 +17,11 @@ class square_data_class {
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    const board_cell_count = parseInt(this.props.board_width) ** 2;
+    console.log("cell count:" + board_cell_count);
     this.state = {
-      squares: new Array(16).fill(new square_data_class()),
+      squares: new Array(board_cell_count).fill(new square_data_class()),
       keypress: "",
       board_width: 4,
     };
@@ -34,23 +39,33 @@ class App extends React.Component {
     console.log("click from a square:" + i);
   }
 
-  componentDidMount() {
-    // const copy_square = this.state.squares;
-    // copy_square[0].value = "2";
-    // copy_square[0].id = "2";
-    // copy_square[0].square_click_handler = this.handleClick;
-
-    // this.setState({ squares: copy_square });
-    // console.log("squares in mount:" + this.state.squares[0].value);
-
+  setRowAndColumn() {
     const copy_squares = this.state.squares; //copy entire square class array
+    var row_count = 0;
+    var col_count = 0;
 
+    for (let i = 0; i < copy_squares.length; i++) {
+      copy_squares[i].row = row_count;
+      copy_squares[i].col = col_count;
+
+      col_count++;
+
+      if (col_count >= this.props.board_width) {
+        col_count = 0;
+        row_count++;
+      }
+    }
+    this.setState({ squares: copy_squares });
+  }
+
+  componentDidMount() {
+    const copy_squares = this.state.squares; //copy entire square class array
     for (let i = 0; i < this.state.board_width ** 2; i++) {
       copy_squares[i].value = i;
       copy_squares[i].id = i;
       copy_squares[i].square_click_handler = this.handleClick;
     }
-
+    this.setRowAndColumn();
     this.setState({ squares: copy_squares });
 
     //capture keypress
@@ -75,7 +90,7 @@ class App extends React.Component {
               return (
                 <My_Button
                   my_key={i}
-                  onClickFunction={this.state.squares[0].square_click_handler}
+                  onClickFunction={this.state.squares[i].square_click_handler}
                 />
               );
             })}
