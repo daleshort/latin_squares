@@ -21,12 +21,25 @@ class App extends React.Component {
     const board_cell_count = parseInt(this.props.board_width) ** 2;
     console.log("cell count:" + board_cell_count);
     this.state = {
-      squares: new Array(board_cell_count).fill(new square_data_class()),
+      squares: [],
+      //      squares: new Array(board_cell_count).fill(new square_data_class()),
       keypress: "",
       board_width: 4,
     };
     // this.state = { squares: [new square_data_class()], keypress: "", board_width: 4, };
     this.handleClick = this.handleClick.bind(this);
+    this.loopButtons = this.loopButtons.bind(this);
+
+    const copy_squares = this.state.squares; //copy entire square class array
+    for (let i = 0; i < this.state.board_width ** 2; i++) {
+      const square = new square_data_class();
+      square.value = i;
+      square.id = i;
+      square.square_click_handler = this.handleClick;
+      copy_squares.push(square);
+    }
+    this.setState({ squares: copy_squares });
+    this.setRowAndColumn();
   }
 
   keydownHandler = (event) => {
@@ -40,14 +53,13 @@ class App extends React.Component {
   }
 
   setRowAndColumn() {
-    const copy_squares = this.state.squares; //copy entire square class array
+    const copy_squares = this.state.squares.slice(); //copy entire square class array
     var row_count = 0;
     var col_count = 0;
 
     for (let i = 0; i < copy_squares.length; i++) {
       copy_squares[i].row = row_count;
       copy_squares[i].col = col_count;
-
       col_count++;
 
       if (col_count >= this.props.board_width) {
@@ -55,18 +67,21 @@ class App extends React.Component {
         row_count++;
       }
     }
+
     this.setState({ squares: copy_squares });
   }
 
   componentDidMount() {
-    const copy_squares = this.state.squares; //copy entire square class array
-    for (let i = 0; i < this.state.board_width ** 2; i++) {
-      copy_squares[i].value = i;
-      copy_squares[i].id = i;
-      copy_squares[i].square_click_handler = this.handleClick;
-    }
-    this.setRowAndColumn();
-    this.setState({ squares: copy_squares });
+    // const copy_squares = this.state.squares; //copy entire square class array
+    // for (let i = 0; i < this.state.board_width ** 2; i++) {
+    //   const square = new square_data_class();
+    //   square.value = i;
+    //   square.id = i;
+    //   square.square_click_handler = this.handleClick;
+    //   copy_squares.push(square);
+    // }
+    // this.setState({ squares: copy_squares });
+    // this.setRowAndColumn();
 
     //capture keypress
     document.addEventListener("keydown", this.keydownHandler);
@@ -80,21 +95,32 @@ class App extends React.Component {
     return this.state.squares;
   }
 
+  loopButtons() {
+    const copy_squares = this.state.squares;
+    const button_array = [];
+    console.log("this in loop buttons:", this);
+    console.log("copy squares", copy_squares);
+    console.log("squares from state", this.state.squares);
+    for (let i = 0; i < this.props.board_width ** 2; i++) {
+      button_array.push(
+        <My_Button
+          my_key={i}
+          //i dont think onClick is different for each button
+          my_row={copy_squares[i].row}
+          my_col={copy_squares[i].col}
+          onClickFunction={this.state.squares[i].square_click_handler}
+        />
+      );
+    }
+    return button_array;
+  }
+
   render() {
+    console.log("state going into render", this.state.squares);
     return (
       <div className="App">
         <header className="App-header">
-          <div className="container">
-            {/* "I'm a looped element" */}
-            {Array.from({ length: 16 }, (x, i) => {
-              return (
-                <My_Button
-                  my_key={i}
-                  onClickFunction={this.state.squares[i].square_click_handler}
-                />
-              );
-            })}
-          </div>
+          <div className="container">{this.loopButtons()}</div>
         </header>
       </div>
     );
@@ -103,32 +129,29 @@ class App extends React.Component {
 class My_Button extends React.Component {
   constructor(props) {
     super(props);
+    this.onClick = this.onClick.bind(this);
+    // console.log("in constructor row is" + this.props.my_row);
+    //console.log("in constructor col is" + this.props.my_col);
 
     this.state = { my_key: "", onClickFunction: null };
-    this.onClick = this.onClick.bind(this);
+
     //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
+
+    //this.generatePositionStyle = this.geneatePositionSyle.bind(this);
   }
 
   componentDidMount() {
-    this.setState({
-      my_key: this.props.my_key,
-      onClickFunction: this.props.onClickFunction,
-    });
-
-    console.log("component did mount:" + this.props.my_key);
+    // this.setState({
   }
 
   onClick() {
-    //  console.log("click detected");
-    //  console.log("On click" + this.props.my_key);
-    //  console.log("key is" + this.props.my_key);
     this.props.onClickFunction(this.props.my_key);
   }
 
   render() {
     return (
-      <Button className="box-1" key={this.props.my_key} onClick={this.onClick}>
-        {this.props.my_key}
+      <Button className="box-1" onClick={this.onClick}>
+        ({this.props.my_row} , {this.props.my_col})
       </Button>
     );
   }
