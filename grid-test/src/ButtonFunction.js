@@ -23,6 +23,8 @@ const ButtonFunction = React.forwardRef(
       my_col,
       isSelected,
       onClickFunction,
+      value,
+      handleFocusAway,
       ...props
     },
     ref
@@ -30,7 +32,11 @@ const ButtonFunction = React.forwardRef(
     // const [count, setCount] = useState(0);
 
     const handleClick = () => {
-      onClickFunction(my_key);
+      onClickFunction(parseInt(my_key));
+    };
+
+    const handleFocusAwayFunc = () => {
+      handleFocusAway(parseInt(my_key));
     };
 
     return (
@@ -38,9 +44,10 @@ const ButtonFunction = React.forwardRef(
         style={{ ...style }}
         className="gridbox"
         onClick={handleClick}
+        onBlur={handleFocusAwayFunc}
         ref={ref}
       >
-        {isSelected ? "true" : "false"}
+        {value}
       </button>
     );
     // return (

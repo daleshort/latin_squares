@@ -1,20 +1,36 @@
 
 .gridbox {
 
-  background-color: #61dafb;
-  border: 2px solid #282c34;
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid rgb(0, 0, 0);
   margin: 0;
   padding:0;
   box-sizing: border-box;
+  color:white;
+  font-size: large;
 
+}
+
+
+.container#app{
+  background:rgb(40,40, 40);
+  min-height: 400px;
+  width: 400px;
+  justify-content: center;
+  align-items: center;
+  vertical-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .boxHighlight {
 
   background-color: #ffffff00;
-  border: 4px solid #ff0000;
-  margin: 0;
-  padding:0;
+  border: 5px solid #000000;
+  margin: 3;
+  padding:2;
   /* box-sizing: border-box; */
 }
 
@@ -32,7 +48,7 @@
 */
 
 .gridbox:focus{
-  background-color: rgb(255, 174, 0);
+  background-color: rgba(255, 174, 0, 0.301);
   outline: none;
 } 
 
@@ -87,16 +103,6 @@ ul {
   padding: 0 30px;
 }
 
-.container#app{
-  background:rgb(46, 46, 46);
-  min-height: 400px;
-  width: 400px;
-  justify-content: center;
-  align-items: center;
-  vertical-align: center;
-  padding-top: 10px;
-  box-sizing: border-box;
-}
 
 .navbar {
   background: #232323;
