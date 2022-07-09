@@ -8,7 +8,9 @@ const ReactGridLayout = WidthProvider(RGL);
 
 class square_data_class {
   constructor() {
-    const value = "";
+    const value = null; //current value of square
+    const value_correct = null; //answer
+    const value_start = null; // value prepopulated on the board.  if set square will not be editable
     const id = "";
     const row = null;
     const col = null;
@@ -28,38 +30,75 @@ export default class MyFirstGrid extends React.PureComponent {
     onLayoutChange: function () {},
     margin: [0, 0],
     autoSize: false,
+    input_squares: [],
+    testing: false,
   };
 
   constructor(props) {
     super(props);
-
-    const grid_layout = this.generateLayoutGrid();
-    const highlight_layout = this.generateLayoutHighlights();
-
-    const layout = this.generateLayoutHighlights().concat(
-      this.generateLayoutGrid()
-    );
-
-    console.log("layout", layout);
-    this.state = { layout, squares: [], keypress: "" };
     this.handleClick = this.handleClick.bind(this);
     this.handleFocusAway = this.handleFocusAway.bind(this);
 
-    const copy_squares = this.state.squares; //copy entire square class array
-    for (let i = 0; i < this.props.cols ** 2; i++) {
-      const square = new square_data_class();
-      square.value = "";
-      square.id = i;
-      square.square_click_handler = this.handleClick;
-      square.handleFocusAway = this.handleFocusAway;
-      copy_squares.push(square);
-    }
-    this.setState({ squares: copy_squares });
-    this.setRowAndColumn();
+    const square_data = this.initalizeSquareData();
+    //initalize the layout for the hightlights and then the grid
+    console.log("square data:", square_data);
+    const layout = this.generateLayoutHighlights(square_data).concat(
+      this.generateLayoutGrid(square_data)
+    );
+
+    console.log("layout", layout);
+    this.state = { layout, squares: square_data, keypress: "" };
   }
 
-  handleFocusAway(i) {
-    console.log("focus lost: ", i);
+  initalizeSquareData() {
+    let filledSquares = new Array();
+    if (this.props.testing == true) {
+      //fill the square state with empty squares the dimensions of the board
+      const copy_squares = [];
+      for (let i = 0; i < this.props.cols ** 2; i++) {
+        const square = new square_data_class();
+        square.value = null;
+        square.id = i;
+        square.square_click_handler = this.handleClick;
+        square.handleFocusAway = this.handleFocusAway;
+        copy_squares.push(square);
+      }
+      //set the row and column properties automatically
+      filledSquares = this.setRowAndColumn(copy_squares);
+    } else {
+    }
+    return filledSquares;
+  }
+
+  setRowAndColumn(copy_squares) {
+    var row_count = 0;
+    var col_count = 0;
+
+    for (let i = 0; i < Object.keys(copy_squares).length; i++) {
+      copy_squares[i].row = row_count;
+      copy_squares[i].col = col_count;
+      col_count++;
+
+      if (col_count >= this.props.cols) {
+        col_count = 0;
+        row_count++;
+      }
+    }
+
+    return copy_squares;
+  }
+
+  handleFocusAway(square_reporting) {
+    console.log("focus lost: ", square_reporting);
+
+    const copy_squares = this.state.squares.slice();
+    copy_squares.map((x, i) => {
+      if (x.isSelected == true) {
+        x.isSelected = false;
+      }
+      return x;
+    });
+    this.setState({ squares: copy_squares });
   }
 
   keydownHandler = (event) => {
@@ -87,13 +126,12 @@ export default class MyFirstGrid extends React.PureComponent {
     }
   };
 
-  generateLayoutGrid() {
-    const p = this.props;
-    var number_items = p.cols ** 2;
+  generateLayoutGrid(square_data) {
+    var number_items = Object.keys(square_data).length;
     return _.map(new Array(number_items), function (item, i) {
       return {
-        x: i % p.cols,
-        y: Math.floor(i / p.cols),
+        x: square_data[i].row,
+        y: square_data[i].col,
         w: 1,
         h: 1,
         i: i.toString(),
@@ -101,8 +139,9 @@ export default class MyFirstGrid extends React.PureComponent {
     });
   }
 
-  generateLayoutHighlights() {
-    const highlightKeyStart = this.props.cols ** 2;
+  generateLayoutHighlights(square_data) {
+    var number_items = Object.keys(square_data).length;
+    const highlightKeyStart = number_items;
 
     return [
       {
@@ -113,25 +152,6 @@ export default class MyFirstGrid extends React.PureComponent {
         i: highlightKeyStart.toString(),
       },
     ];
-  }
-
-  setRowAndColumn() {
-    const copy_squares = this.state.squares.slice(); //copy entire square class array
-    var row_count = 0;
-    var col_count = 0;
-
-    for (let i = 0; i < copy_squares.length; i++) {
-      copy_squares[i].row = row_count;
-      copy_squares[i].col = col_count;
-      col_count++;
-
-      if (col_count >= this.props.cols) {
-        col_count = 0;
-        row_count++;
-      }
-    }
-
-    this.setState({ squares: copy_squares });
   }
 
   componentDidMount() {
@@ -157,7 +177,7 @@ export default class MyFirstGrid extends React.PureComponent {
     for (let i = 0; i < number_items; i++)
       list_items.push(
         <ButtonFunction
-          my_key={i}
+          my_key={this.state.squares[i].id}
           value={this.state.squares[i].value}
           key={this.state.squares[i].id}
           my_row={this.state.squares[i].row}
@@ -166,10 +186,7 @@ export default class MyFirstGrid extends React.PureComponent {
           onClickFunction={this.state.squares[i].square_click_handler}
           handleFocusAway={this.state.squares[i].handleFocusAway}
           className="gridbox"
-        >
-          {" "}
-          text{" "}
-        </ButtonFunction>
+        />
       );
 
     console.log("Dom generated", list_items);
