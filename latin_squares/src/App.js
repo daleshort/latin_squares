@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
-import ReactDoku from "./ReactDoku";
+//import ReactDoku from "./ReactDoku";
+import MyFirstGrid from "./MyFirstGrid";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
           </div>
         </div>
         <div class="container" id="app">
-          <ReactDoku board_width={4} />
+          <MyFirstGrid />
         </div>
       </header>
 

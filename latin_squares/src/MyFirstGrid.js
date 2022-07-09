@@ -22,11 +22,10 @@ export default class MyFirstGrid extends React.PureComponent {
     className: "gridlayout",
     isDraggable: false,
     isResizable: false,
-    cols: 9,
-    rowHeight: 40,
+    cols: 4,
+    rowHeight: 30,
     onLayoutChange: function () {},
     margin: [0, 0],
-    autoSize: false,
   };
 
   constructor(props) {
@@ -57,8 +56,8 @@ export default class MyFirstGrid extends React.PureComponent {
     return {
       x: 1,
       y: 1,
-      w: 3,
-      h: 3,
+      w: 10,
+      h: 10,
       i: highlightKeyStart.toString(),
     };
   }
@@ -108,10 +107,8 @@ export default class MyFirstGrid extends React.PureComponent {
   }
 
   addHighlightDOM() {
-    const highlightKeyStart = this.props.cols ** 2;
-
     return [
-      <div className="boxHighlight" key={highlightKeyStart.toString()}>
+      <div className="boxHighlight" key="16">
         my box
       </div>,
     ];
@@ -137,57 +134,14 @@ export default class MyFirstGrid extends React.PureComponent {
 
   render() {
     return (
-      <div class="App">
-        <nav class="navbar">
-          <div class="container">
-            <div class="logo">Latin Squares</div>
-            <ul class="nav">
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">About</a>
-              </li>
-              <li>
-                <a href="#">Contact</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-        <header class="header">
-          <div class="container">
-            <div>
-              <h1>ReactDoku</h1>
-              <p>
-                A crazy game of Latin Square Sudoku that I barely understand.
-                Built in React by James and Dale at The Recurse Center
-              </p>
-            </div>
-          </div>
-          <div class="container" id="app">
-            <ReactGridLayout
-              layout={this.state.layout}
-              onLayoutChange={this.onLayoutChange}
-              allowOverlap={true}
-              {...this.props}
-            >
-              {this.generateDOM()}
-            </ReactGridLayout>
-          </div>
-        </header>
-
-        <section class="boxes">
-          <div class="container">
-            <div class="box-footer">
-              <h2>
-                <i class="fas fa-mobile"></i>How to play
-              </h2>
-              <p>This could be some instructions about how to play the game!</p>
-            </div>
-          </div>
-        </section>
-      </div>
+      <ReactGridLayout
+        layout={this.state.layout}
+        onLayoutChange={this.onLayoutChange}
+        allowOverlap={true}
+        {...this.props}
+      >
+        {this.generateDOM()}
+      </ReactGridLayout>
     );
   }
 }
@@ -202,9 +156,13 @@ class MyButton extends React.Component {
     this.state = { my_key: "", onClickFunction: null };
 
     //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
+
+    //this.generatePositionStyle = this.geneatePositionSyle.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    // this.setState({
+  }
 
   onClick() {
     this.props.onClickFunction(this.props.my_key);
