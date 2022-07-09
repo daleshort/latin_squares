@@ -15,10 +15,19 @@ import Button from "react-bootstrap/Button";
 
 const ButtonFunction = React.forwardRef(
   (
-    { style, className, my_key, my_row, my_col, onClickFunction, ...props },
+    {
+      style,
+      className,
+      my_key,
+      my_row,
+      my_col,
+      isSelected,
+      onClickFunction,
+      ...props
+    },
     ref
   ) => {
-    const [count, setCount] = useState(0);
+    // const [count, setCount] = useState(0);
 
     const handleClick = () => {
       onClickFunction(my_key);
@@ -31,7 +40,7 @@ const ButtonFunction = React.forwardRef(
         onClick={handleClick}
         ref={ref}
       >
-        {my_col},{my_row}
+        {isSelected ? "true" : "false"}
       </button>
     );
     // return (

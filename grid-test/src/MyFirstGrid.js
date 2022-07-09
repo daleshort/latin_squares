@@ -94,6 +94,13 @@ export default class MyFirstGrid extends React.PureComponent {
 
   handleClick(i) {
     console.log("click from a square:" + i);
+    const copy_squares = this.state.squares.slice(); //copy entire square class array
+    copy_squares.map((x, i) => {
+      x.isSelected = false;
+      return x;
+    });
+    copy_squares[parseInt(i)].isSelected = true;
+    this.setState({ squares: copy_squares });
   }
 
   generateDOM() {
@@ -106,6 +113,7 @@ export default class MyFirstGrid extends React.PureComponent {
           key={this.state.squares[i].id}
           my_row={this.state.squares[i].row}
           my_col={this.state.squares[i].col}
+          isSelected={this.state.squares[i].isSelected}
           onClickFunction={this.state.squares[i].square_click_handler}
           className="gridbox"
         >
