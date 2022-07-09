@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import RGL, { WidthProvider } from "react-grid-layout";
 import "./MyFirstGrid.css";
-import Button from "react-bootstrap/Button";
+import ButtonFunction from "./ButtonFunction.js";
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -51,6 +51,12 @@ export default class MyFirstGrid extends React.PureComponent {
     this.setRowAndColumn();
   }
 
+  keydownHandler = (event) => {
+    if ("1234567890".includes(event.key)) {
+      console.log("key press:" + event.key);
+    }
+  };
+
   generateLayoutHighlights() {
     const highlightKeyStart = this.props.cols ** 2;
 
@@ -95,15 +101,21 @@ export default class MyFirstGrid extends React.PureComponent {
     const list_items = [];
     for (let i = 0; i < number_items; i++)
       list_items.push(
-        <div key={this.state.squares[i].id} className="gridbox">
-          <span className="text">
-            {this.state.squares[i].col} {this.state.squares[i].row}
-          </span>
-        </div>
+        <ButtonFunction
+          my_key={i}
+          key={this.state.squares[i].id}
+          my_row={this.state.squares[i].row}
+          my_col={this.state.squares[i].col}
+          onClickFunction={this.state.squares[i].square_click_handler}
+          className="gridbox"
+        >
+          {" "}
+          text{" "}
+        </ButtonFunction>
       );
 
     list_items.push(this.addHighlightDOM());
-
+    console.log("Dom generated", list_items);
     return list_items;
   }
 
@@ -137,11 +149,11 @@ export default class MyFirstGrid extends React.PureComponent {
 
   render() {
     return (
-      <div class="App">
-        <nav class="navbar">
-          <div class="container">
-            <div class="logo">Latin Squares</div>
-            <ul class="nav">
+      <div className="App">
+        <nav className="navbar">
+          <div className="container">
+            <div className="logo">Latin Squares</div>
+            <ul className="nav">
               <li>
                 <a href="#">Home</a>
               </li>
@@ -155,8 +167,8 @@ export default class MyFirstGrid extends React.PureComponent {
           </div>
         </nav>
 
-        <header class="header">
-          <div class="container">
+        <header className="header">
+          <div className="container">
             <div>
               <h1>ReactDoku</h1>
               <p>
@@ -165,7 +177,7 @@ export default class MyFirstGrid extends React.PureComponent {
               </p>
             </div>
           </div>
-          <div class="container" id="app">
+          <div className="container" id="app">
             <ReactGridLayout
               layout={this.state.layout}
               onLayoutChange={this.onLayoutChange}
@@ -177,11 +189,11 @@ export default class MyFirstGrid extends React.PureComponent {
           </div>
         </header>
 
-        <section class="boxes">
-          <div class="container">
-            <div class="box-footer">
+        <section className="boxes">
+          <div className="container">
+            <div className="box-footer">
               <h2>
-                <i class="fas fa-mobile"></i>How to play
+                <i className="fas fa-mobile"></i>How to play
               </h2>
               <p>This could be some instructions about how to play the game!</p>
             </div>
@@ -192,32 +204,51 @@ export default class MyFirstGrid extends React.PureComponent {
   }
 }
 
-class MyButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-    // console.log("in constructor row is" + this.props.my_row);
-    //console.log("in constructor col is" + this.props.my_col);
+// //from forum pst
+// function Component({style, className, key, children, ...restOfProps}) {
+//   return (
+//     <div style={{ <styles you wish to apply> , ...style}} className={["classes you wish to apply", className].join(' ')} key={key} {...restOfProps}>
+//        //Content goes here
+//         {children}
+//     </div>
+//   );
+// }
 
-    this.state = { my_key: "", onClickFunction: null };
+//from grid docs
+// const ButtonFunction = React.forwardRef(({style, className, ...props}, ref) => {
+//   return (
+//     <div style={{ ...style}} className="gridbox" ref={ref}>
+//       {/* Some other content */}
+//     </div>
+//   );
+// }
 
-    //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
-  }
+// class MyButton extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.onClick = this.onClick.bind(this);
+//     // console.log("in constructor row is" + this.props.my_row);
+//     //console.log("in constructor col is" + this.props.my_col);
 
-  componentDidMount() {}
+//     this.state = { my_key: "", onClickFunction: null };
 
-  onClick() {
-    this.props.onClickFunction(this.props.my_key);
-  }
+//     //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
+//   }
 
-  render() {
-    return (
-      <Button className="dokubox1" onClick={this.onClick}>
-        ({this.props.my_row},{this.props.my_col})
-      </Button>
-    );
-  }
-}
+//   componentDidMount() {}
+
+//   onClick() {
+//     this.props.onClickFunction(this.props.my_key);
+//   }
+
+//   render() {
+//     return (
+//       <Button className="dokubox1" key={this.props.key} onClick={this.onClick}>
+//         ({this.props.my_row},{this.props.my_col})
+//       </Button>
+//     );
+//   }
+// }
 
 // if (process.env.STATIC_EXAMPLES === true) {
 //   import("../test-hook.jsx").then((fn) => fn.default(NoDraggingLayout));

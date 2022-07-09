@@ -16,14 +16,30 @@
   margin: 0;
   padding:0;
   /* box-sizing: border-box; */
-
-
 }
+
+/* .dokubox1{
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  color: black;
+  font-size: 90%;
+  text-align: center;
+  border-radius: 2px;
+  min-width: 100px;
+  min-height: 100px;
+  
+}
+*/
+
+.gridbox:focus{
+  background-color: rgb(255, 174, 0);
+  outline: none;
+} 
 
 .gridlayout{
 
-  background-color: #1eb40d;
-  border: 2px solid #7806f2;
+  /* background-color: #1eb40d;
+  border: 2px solid #7806f2; */
   margin: 0;
   padding:0;
   /* box-sizing: border-box; */
