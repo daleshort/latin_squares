@@ -30,8 +30,8 @@ export default class MyFirstGrid extends React.PureComponent {
     onLayoutChange: function () {},
     margin: [0, 0],
     autoSize: false,
-    input_squares: [],
     testing: false,
+    testing_grid_qty: 16,
   };
 
   constructor(props) {
@@ -55,7 +55,8 @@ export default class MyFirstGrid extends React.PureComponent {
     if (this.props.testing == true) {
       //fill the square state with empty squares the dimensions of the board
       const copy_squares = [];
-      for (let i = 0; i < this.props.cols ** 2; i++) {
+      for (let i = 0; i < this.props.testing_grid_qty; i++) {
+        // for (let i = 0; i < this.props.testing_grid_qty; i++) {
         const square = new square_data_class();
         square.value = null;
         square.id = i;
@@ -140,8 +141,7 @@ export default class MyFirstGrid extends React.PureComponent {
   }
 
   generateLayoutHighlights(square_data) {
-    var number_items = Object.keys(square_data).length;
-    const highlightKeyStart = number_items;
+    const highlightKeyStart = Object.keys(square_data).length;
 
     return [
       {
@@ -170,7 +170,7 @@ export default class MyFirstGrid extends React.PureComponent {
   }
 
   generateDOM() {
-    var number_items = this.props.cols ** 2;
+    var number_items = Object.keys(this.state.squares).length;
     const list_items = [];
     list_items.push(this.generateHighlightDOM());
 
@@ -188,36 +188,11 @@ export default class MyFirstGrid extends React.PureComponent {
           className="gridbox"
         />
       );
-
-    console.log("Dom generated", list_items);
     return list_items;
   }
-  // generateDOM() {
-  //   var number_items = this.props.cols ** 2;
-  //   const list_items = [];
-  //   for (let i = 0; i < number_items; i++)
-  //     list_items.push(
-  //       <ButtonFunction
-  //         my_key={i}
-  //         key={this.state.squares[i].id}
-  //         my_row={this.state.squares[i].row}
-  //         my_col={this.state.squares[i].col}
-  //         isSelected={this.state.squares[i].isSelected}
-  //         onClickFunction={this.state.squares[i].square_click_handler}
-  //         className="gridbox"
-  //       >
-  //         {" "}
-  //         text{" "}
-  //       </ButtonFunction>
-  //     );
-
-  //   list_items.push(this.addHighlightDOM());
-  //   console.log("Dom generated", list_items);
-  //   return list_items;
-  // }
 
   generateHighlightDOM() {
-    const highlightKeyStart = this.props.cols ** 2;
+    const highlightKeyStart = Object.keys(this.state.squares).length;
 
     return [
       <div className="boxHighlight" key={highlightKeyStart.toString()} />,
