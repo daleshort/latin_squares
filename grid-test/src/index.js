@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import ReactDoku from "./ReactDoku";
 import reportWebVitals from "./reportWebVitals";
+import MyFirstGrid from "./MyFirstGrid";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ReactDoku board_width={4} />
+    <MyFirstGrid />
   </React.StrictMode>
 );
 
