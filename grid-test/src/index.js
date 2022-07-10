@@ -4,16 +4,54 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import MyFirstGrid from "./MyFirstGrid";
 import "./MyFirstGrid.css";
+import Button from "react-bootstrap/Button";
 
 let json = require("./test_square_data.json");
 console.log("test data", json);
+let json2 = require("./test_square_data2.json");
+console.log("test data2", json2);
 
 class GameManager extends React.PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = { squareData: this.props.squareData, hasComponent: true };
+
+    this.handleClickClear1 = this.handleClickClear1.bind(this);
+    this.handleClickClear2 = this.handleClickClear2.bind(this);
+    this.handleSetState1 = this.handleSetState1.bind(this);
+    this.handleSetState2 = this.handleSetState2.bind(this);
+    this.handleAutoClearState = this.handleAutoClearState.bind(this);
+  }
+
+  handleClickClear1() {
+    console.log("has component false");
+    this.setState({ hasComponent: false });
+  }
+
+  handleClickClear2() {
+    console.log("has component true");
+    this.setState({ hasComponent: true });
+  }
+
+  handleSetState1() {
+    this.setState({ squareData: this.props.squareData });
+  }
+  handleSetState2() {
+    this.setState({ squareData: this.props.squareData2 });
+  }
+
+  handleAutoClearState() {
+    this.setState({ hasComponent: false });
+    //this is all sorts of wrong
+    setTimeout(() => {
+      this.setState({ squareData: this.props.squareData2 });
+      this.setState({ hasComponent: true });
+    }, 2);
   }
 
   render() {
+    console.log("rerender main component");
     return (
       <div className="App">
         <nav className="navbar">
@@ -44,8 +82,18 @@ class GameManager extends React.PureComponent {
             </div>
           </div>
           <div className="container" id="app">
-            <MyFirstGrid testing={false} squareData={this.props.squareData} />
+            {this.state.hasComponent && (
+              <MyFirstGrid testing={false} squareData={this.state.squareData} />
+            )}
           </div>
+          <Button onClick={this.handleClickClear1}> Clear Board1</Button>
+          <Button onClick={this.handleClickClear2}> Show board</Button>
+          <Button onClick={this.handleSetState1}> set state 1</Button>
+          <Button onClick={this.handleSetState2}> set state 2</Button>
+          <Button onClick={this.handleAutoClearState}>
+            {" "}
+            auto change state
+          </Button>
         </header>
 
         <section className="boxes">
@@ -70,7 +118,7 @@ class GameManager extends React.PureComponent {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <GameManager squareData={json} />
+    <GameManager squareData={json2} squareData2={json} />
   </React.StrictMode>
 );
 

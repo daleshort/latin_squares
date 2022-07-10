@@ -30,7 +30,7 @@ class GameManager extends React.PureComponent {
   }
 }
 
-export default class MyFirstGrid extends React.PureComponent {
+export default class MyFirstGrid extends React.Component {
   static defaultProps = {
     className: "gridlayout",
     isDraggable: false,
@@ -51,15 +51,15 @@ export default class MyFirstGrid extends React.PureComponent {
 
     console.log("json test data loaded", this.props.squareData);
 
-    const square_data = this.initalizeSquareData();
+    const square_data_init = this.initalizeSquareData();
     //initalize the layout for the hightlights and then the grid
-    console.log("square data:", square_data);
-    const layout = this.generateLayoutHighlights(square_data).concat(
-      this.generateLayoutGrid(square_data)
+    console.log("square data:", square_data_init);
+    const layout = this.generateLayoutHighlights(square_data_init).concat(
+      this.generateLayoutGrid(square_data_init)
     );
 
     console.log("layout", layout);
-    this.state = { layout, squares: square_data, keypress: "" };
+    this.state = { layout, squares: square_data_init, keypress: "" };
   }
 
   initalizeSquareData() {
