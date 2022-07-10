@@ -50,6 +50,7 @@ export default class MyFirstGrid extends React.Component {
     this.handleFocusAway = this.handleFocusAway.bind(this);
 
     console.log("json test data loaded", this.props.squareData);
+    console.log("highlight test data loaded: ", this.props.highlightData);
 
     const square_data_init = this.initalizeSquareData();
     //initalize the layout for the hightlights and then the grid
@@ -79,7 +80,6 @@ export default class MyFirstGrid extends React.Component {
       //set the row and column properties automatically
       filledSquares = this.setRowAndColumn(copy_squares);
     } else {
-      console.log("square data length");
       for (
         let index = 0;
         index < Object.keys(this.props.squareData).length;
@@ -87,7 +87,6 @@ export default class MyFirstGrid extends React.Component {
       ) {
         const element = this.props.squareData[index];
         const square = new square_data_class();
-        console.log("element", element);
         square.value = element.value; //current value of square
         square.value_correct = element.value_correct; //answer
         square.value_start = element.value_start; // value prepopulated on the board.  if set square will not be editable
@@ -173,17 +172,23 @@ export default class MyFirstGrid extends React.Component {
   }
 
   generateLayoutHighlights(square_data) {
-    const highlightKeyStart = Object.keys(square_data).length;
+    var highlightLayout = [];
+    for (
+      let index = 0;
+      index < Object.keys(this.props.highlightData).length;
+      index++
+    ) {
+      const element = this.props.highlightData[index];
 
-    return [
-      {
-        x: 1,
-        y: 1,
-        w: 3,
-        h: 3,
-        i: highlightKeyStart.toString(),
-      },
-    ];
+      highlightLayout.push({
+        x: parseInt(element.x),
+        y: parseInt(element.y),
+        w: parseInt(element.w),
+        h: parseInt(element.h),
+        i: element.id.toString(),
+      });
+    }
+    return highlightLayout;
   }
 
   componentDidMount() {
@@ -204,7 +209,6 @@ export default class MyFirstGrid extends React.Component {
   generateDOM() {
     var number_items = Object.keys(this.state.squares).length;
     const list_items = [];
-    list_items.push(this.generateHighlightDOM());
 
     for (let i = 0; i < number_items; i++)
       list_items.push(
@@ -222,15 +226,25 @@ export default class MyFirstGrid extends React.Component {
           className="gridbox"
         />
       );
+    console.log("dom with highlight", list_items);
     return list_items;
   }
 
   generateHighlightDOM() {
-    const highlightKeyStart = Object.keys(this.state.squares).length;
+    const highlightDOM = [];
+    for (
+      let index = 0;
+      index < Object.keys(this.props.highlightData).length;
+      index++
+    ) {
+      const element = this.props.highlightData[index];
 
-    return [
-      <div className="boxHighlight" key={highlightKeyStart.toString()} />,
-    ];
+      highlightDOM.push(
+        <div className="boxHighlight" key={element.id.toString()} />
+      );
+    }
+    console.log("highlight DOM", highlightDOM);
+    return highlightDOM;
   }
 
   onLayoutChange(layout) {
@@ -245,6 +259,7 @@ export default class MyFirstGrid extends React.Component {
         allowOverlap={true}
         {...this.props}
       >
+        {this.generateHighlightDOM()}
         {this.generateDOM()}
       </ReactGridLayout>
     );

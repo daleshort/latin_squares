@@ -7,15 +7,20 @@ import "./MyFirstGrid.css";
 import Button from "react-bootstrap/Button";
 
 let json = require("./test_square_data.json");
-console.log("test data", json);
+
 let json2 = require("./test_square_data2.json");
-console.log("test data2", json2);
+
+let highlightJson = require("./test_highlight_data.json");
 
 class GameManager extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { squareData: this.props.squareData, hasComponent: true };
+    this.state = {
+      squareData: this.props.squareData,
+      highlightData: this.props.highlightData,
+      hasComponent: true,
+    };
 
     this.handleClickClear1 = this.handleClickClear1.bind(this);
     this.handleClickClear2 = this.handleClickClear2.bind(this);
@@ -47,7 +52,7 @@ class GameManager extends React.PureComponent {
     setTimeout(() => {
       this.setState({ squareData: this.props.squareData2 });
       this.setState({ hasComponent: true });
-    }, 2);
+    }, 1);
   }
 
   render() {
@@ -83,7 +88,11 @@ class GameManager extends React.PureComponent {
           </div>
           <div className="container" id="app">
             {this.state.hasComponent && (
-              <MyFirstGrid testing={false} squareData={this.state.squareData} />
+              <MyFirstGrid
+                testing={false}
+                squareData={this.state.squareData}
+                highlightData={this.state.highlightData}
+              />
             )}
           </div>
           <Button onClick={this.handleClickClear1}> Clear Board1</Button>
@@ -118,7 +127,11 @@ class GameManager extends React.PureComponent {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <GameManager squareData={json2} squareData2={json} />
+    <GameManager
+      squareData={json2}
+      squareData2={json}
+      highlightData={highlightJson}
+    />
   </React.StrictMode>
 );
 
