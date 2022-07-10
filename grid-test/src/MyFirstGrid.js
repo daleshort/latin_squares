@@ -20,6 +20,16 @@ class square_data_class {
   }
 }
 
+class GameManager extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <MyFirstGrid testing={false} squareData={this.props.squareData} />;
+  }
+}
+
 export default class MyFirstGrid extends React.PureComponent {
   static defaultProps = {
     className: "gridlayout",
@@ -229,57 +239,14 @@ export default class MyFirstGrid extends React.PureComponent {
 
   render() {
     return (
-      <div className="App">
-        <nav className="navbar">
-          <div className="container">
-            <div className="logo">Latin Squares</div>
-            <ul className="nav">
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">About</a>
-              </li>
-              <li>
-                <a href="#">Contact</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-        <header className="header">
-          <div className="container">
-            <div>
-              <h1>ReactDoku</h1>
-              <p>
-                A crazy game of Latin Square Sudoku that I barely understand.
-                Built in React by James and Dale at The Recurse Center
-              </p>
-            </div>
-          </div>
-          <div className="container" id="app">
-            <ReactGridLayout
-              layout={this.state.layout}
-              onLayoutChange={this.onLayoutChange}
-              allowOverlap={true}
-              {...this.props}
-            >
-              {this.generateDOM()}
-            </ReactGridLayout>
-          </div>
-        </header>
-
-        <section className="boxes">
-          <div className="container">
-            <div className="box-footer">
-              <h2>
-                <i className="fas fa-mobile"></i>How to play
-              </h2>
-              <p>This could be some instructions about how to play the game!</p>
-            </div>
-          </div>
-        </section>
-      </div>
+      <ReactGridLayout
+        layout={this.state.layout}
+        onLayoutChange={this.onLayoutChange}
+        allowOverlap={true}
+        {...this.props}
+      >
+        {this.generateDOM()}
+      </ReactGridLayout>
     );
   }
 }
