@@ -4,10 +4,23 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import MyFirstGrid from "./MyFirstGrid";
 
+let json = require("./test_square_data.json");
+console.log("test data", json);
+
+class GameManager extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <MyFirstGrid testing={false} squareData={this.props.squareData} />;
+  }
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <MyFirstGrid testing={true} />
+    <GameManager squareData={json} />
   </React.StrictMode>
 );
 

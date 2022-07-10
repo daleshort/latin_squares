@@ -39,6 +39,8 @@ export default class MyFirstGrid extends React.PureComponent {
     this.handleClick = this.handleClick.bind(this);
     this.handleFocusAway = this.handleFocusAway.bind(this);
 
+    console.log("json test data loaded", this.props.squareData);
+
     const square_data = this.initalizeSquareData();
     //initalize the layout for the hightlights and then the grid
     console.log("square data:", square_data);
@@ -67,6 +69,26 @@ export default class MyFirstGrid extends React.PureComponent {
       //set the row and column properties automatically
       filledSquares = this.setRowAndColumn(copy_squares);
     } else {
+      console.log("square data length");
+      for (
+        let index = 0;
+        index < Object.keys(this.props.squareData).length;
+        index++
+      ) {
+        const element = this.props.squareData[index];
+        const square = new square_data_class();
+        console.log("element", element);
+        square.value = element.value; //current value of square
+        square.value_correct = element.value_correct; //answer
+        square.value_start = element.value_start; // value prepopulated on the board.  if set square will not be editable
+        square.id = element.id;
+        square.row = element.row;
+        square.col = element.col;
+
+        square.square_click_handler = this.handleClick;
+        square.handleFocusAway = this.handleFocusAway;
+        filledSquares.push(square);
+      }
     }
     return filledSquares;
   }
@@ -135,7 +157,7 @@ export default class MyFirstGrid extends React.PureComponent {
         y: square_data[i].col,
         w: 1,
         h: 1,
-        i: i.toString(),
+        i: square_data[i].id.toString(),
       };
     });
   }
@@ -183,6 +205,8 @@ export default class MyFirstGrid extends React.PureComponent {
           my_row={this.state.squares[i].row}
           my_col={this.state.squares[i].col}
           isSelected={this.state.squares[i].isSelected}
+          value_start={this.state.squares[i].value_start}
+          value_correct={this.state.squares[i].value_correct}
           onClickFunction={this.state.squares[i].square_click_handler}
           handleFocusAway={this.state.squares[i].handleFocusAway}
           className="gridbox"

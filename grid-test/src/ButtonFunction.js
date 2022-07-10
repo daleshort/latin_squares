@@ -25,6 +25,8 @@ const ButtonFunction = React.forwardRef(
       onClickFunction,
       value,
       handleFocusAway,
+      value_correct,
+      value_start,
       ...props
     },
     ref
@@ -42,12 +44,12 @@ const ButtonFunction = React.forwardRef(
     return (
       <button
         style={{ ...style }}
-        className="gridbox"
+        className={value_start ? "gridbox-locked" : "gridbox"}
         onClick={handleClick}
         onBlur={handleFocusAwayFunc}
         ref={ref}
       >
-        {value}
+        {value_start ? value_start : value}
       </button>
     );
     // return (
