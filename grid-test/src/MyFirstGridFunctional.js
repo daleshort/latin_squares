@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useCallback, useReducer } from "react";
 import _ from "lodash";
 import RGL, { WidthProvider } from "react-grid-layout";
 import "./MyFirstGridFunctional.css";
@@ -30,43 +30,83 @@ export default function MyFirstGridFunctional({
   margin = [0, 0],
   autoSize = false,
   testing = false,
-  testing_grid_qty = 16,
+  testinggridqty = 16,
   squareData,
   highlightData,
 }) {
-  function handleClick(i) {
-    console.log("click from a square:" + i);
-    // alert("click!");
-    // const copy_squares = squares.slice(); //copy entire square class array
-    // copy_squares.map((x, i) => {
-    //   x.isSelected = false;
-    //   return x;
-    // });
-    // copy_squares[parseInt(i)].isSelected = true;
-    // updateSquareData(copy_squares);
-  }
-
   console.log("json test data loaded", squareData);
   console.log("highlight test data loaded: ", highlightData);
 
-  //initialize square data
-  const [square_data, updateSquareData] = useState(
-    initalizeSquareData({ testing, testing_grid_qty, squareData })
-  );
-  console.log("square data:", square_data);
+  // https://stackoverflow.com/questions/53574614/multiple-calls-to-state-updater-from-usestate-in-component-causes-multiple-re-re
 
-  const [highlight_data, updateHighlightData] = useState(highlightData);
-  const [layout, updateLayout] = useState(
-    generateLayoutHighlights(highlightData).concat(
-      generateLayoutGrid(square_data)
-    )
+  //initialize square data
+  const initalsquaredata = initalizeSquareData(
+    testing,
+    testinggridqty,
+    squareData
+  );
+
+  const layout = generateLayoutHighlights(highlightData).concat(
+    generateLayoutGrid(initalsquaredata)
+  );
+
+  const [state, setState] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    {
+      square_data: initalsquaredata,
+      keypress: "",
+      layout: layout,
+      highlightData: highlightData,
+    }
   );
 
   console.log("layout", layout);
-  const [keypress, updateKeypress] = useState(" ");
 
-  //end setup ______________________
+  //Key press suppport________________
 
+  document.addEventListener("keydown", keydownHandler);
+  //https://stackoverflow.com/questions/55565444/how-to-register-event-with-useeffect-hooks
+  const handleUserKeyPress = useCallback((event) => {
+    const copy_squares = state.square_data.slice();
+    if ("1234567890".includes(event.key)) {
+      console.log("key press:" + event.key);
+      copy_squares.map((x, i) => {
+        if (x.isSelected == true) {
+          x.value = event.key;
+        }
+        return x;
+      });
+    } else {
+      copy_squares.map((x, i) => {
+        if (x.isSelected == true) {
+          x.value = "";
+        }
+        return x;
+      });
+    }
+    setState({ square_data: copy_squares });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleUserKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleUserKeyPress);
+    };
+  }, [handleUserKeyPress]);
+
+  //click support_________________________
+  function handleClick(i) {
+    console.log("click from a square:" + i);
+    const copy_squares = state.square_data.slice(); //copy entire square class array
+    copy_squares.map((x, i) => {
+      x.isSelected = false;
+      return x;
+    });
+    copy_squares[parseInt(i)].isSelected = true;
+    setState({ square_data: copy_squares });
+  }
+
+  //automatic filling of row and column (only used in testing)
   function setRowAndColumn(copy_squares, props) {
     var row_count = 0;
     var col_count = 0;
@@ -85,14 +125,12 @@ export default function MyFirstGridFunctional({
     return copy_squares;
   }
 
-  //need to fix
-
-  function initalizeSquareData(props) {
+  function initalizeSquareData(testing, testinggridqty, squareData) {
     let filledSquares = new Array();
-    if (props.testing == true) {
+    if (testing == true) {
       //fill the square state with empty squares the dimensions of the board
       const copy_squares = [];
-      for (let i = 0; i < props.testing_grid_qty; i++) {
+      for (let i = 0; i < testinggridqty; i++) {
         const square = new square_data_class();
         square.value = null;
         square.id = i;
@@ -103,12 +141,8 @@ export default function MyFirstGridFunctional({
       //set the row and column properties automatically
       filledSquares = setRowAndColumn(copy_squares);
     } else {
-      for (
-        let index = 0;
-        index < Object.keys(props.squareData).length;
-        index++
-      ) {
-        const element = props.squareData[index];
+      for (let index = 0; index < Object.keys(squareData).length; index++) {
+        const element = squareData[index];
         const square = new square_data_class();
         square.value = element.value; //current value of square
         square.value_correct = element.value_correct; //answer
@@ -177,7 +211,7 @@ export default function MyFirstGridFunctional({
     });
   }
 
-  function generateLayoutHighlights(props) {
+  function generateLayoutHighlights(highlightData) {
     var highlightLayout = [];
     for (let index = 0; index < Object.keys(highlightData).length; index++) {
       const element = highlightData[index];
@@ -199,9 +233,10 @@ export default function MyFirstGridFunctional({
   // }
 
   function generateDOM(squares) {
+    console.log("state square data in DOM", squares);
+
     var number_items = Object.keys(squares).length;
     const list_items = [];
-
     for (let i = 0; i < number_items; i++)
       list_items.push(
         <ButtonFunction
@@ -224,14 +259,19 @@ export default function MyFirstGridFunctional({
 
   function generateHighlightDOM(highlight_data) {
     const highlightDOM = [];
-    for (let index = 0; index < Object.keys(highlight_data).length; index++) {
-      const element = highlight_data[index];
+    console.log("high light state: ", state.highlightData);
+    for (
+      let index = 0;
+      index < Object.keys(state.highlightData).length;
+      index++
+    ) {
+      const element = state.highlightData[index];
 
       highlightDOM.push(
         <div className="boxHighlight" key={element.id.toString()} />
       );
     }
-    console.log("highlight DOM", highlightDOM);
+    // console.log("highlight DOM", state.highlightData);
     return highlightDOM;
   }
 
@@ -252,8 +292,8 @@ export default function MyFirstGridFunctional({
       margin={margin}
       autoSize={autoSize}
     >
-      {generateHighlightDOM(highlight_data)}
-      {generateDOM(square_data)}
+      {generateHighlightDOM(state.highlightData)}
+      {generateDOM(state.square_data)}
     </ReactGridLayout>
   );
 }
