@@ -34,6 +34,18 @@ export default function MyFirstGridFunctional({
   squareData,
   highlightData,
 }) {
+  function handleClick(i) {
+    console.log("click from a square:" + i);
+    // alert("click!");
+    // const copy_squares = squares.slice(); //copy entire square class array
+    // copy_squares.map((x, i) => {
+    //   x.isSelected = false;
+    //   return x;
+    // });
+    // copy_squares[parseInt(i)].isSelected = true;
+    // updateSquareData(copy_squares);
+  }
+
   console.log("json test data loaded", squareData);
   console.log("highlight test data loaded: ", highlightData);
 
@@ -72,6 +84,8 @@ export default function MyFirstGridFunctional({
 
     return copy_squares;
   }
+
+  //need to fix
 
   function initalizeSquareData(props) {
     let filledSquares = new Array();
@@ -184,18 +198,6 @@ export default function MyFirstGridFunctional({
   //   document.addEventListener("keydown", this.keydownHandler);
   // }
 
-  //need to fix
-  function handleClick(i) {
-    // console.log("click from a square:" + i);
-    // const copy_squares = squares.slice(); //copy entire square class array
-    // copy_squares.map((x, i) => {
-    //   x.isSelected = false;
-    //   return x;
-    // });
-    // copy_squares[parseInt(i)].isSelected = true;
-    // updateSquareData(copy_squares);
-  }
-
   function generateDOM(squares) {
     var number_items = Object.keys(squares).length;
     const list_items = [];
@@ -216,7 +218,7 @@ export default function MyFirstGridFunctional({
           className="gridbox"
         />
       );
-    console.log("dom with highlight", list_items);
+    console.log("dom", list_items);
     return list_items;
   }
 
@@ -243,7 +245,7 @@ export default function MyFirstGridFunctional({
       onLayoutChange={onLayoutChange}
       allowOverlap={true}
       className="gridlayout"
-      isDraggable={className}
+      isDraggable={isDraggable}
       isResizable={isResizable}
       cols={cols}
       rowHeight={rowHeight}

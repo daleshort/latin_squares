@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // const ButtonFunction = React.forwardRef({style, className, ...props}, ref) => {
 //   return ({
@@ -31,10 +31,12 @@ const ButtonFunction = React.forwardRef(
     ref
   ) => {
     // const [count, setCount] = useState(0);
-
-    const handleClick = () => {
-      onClickFunction(parseInt(my_key));
-    };
+    // function useHandleClick() {
+    //   useEffect(() => {
+    //     // console.log("click in button component");
+    //     onClickFunction(parseInt(my_key));
+    //   });
+    // }
 
     const handleFocusAwayFunc = () => {
       handleFocusAway(parseInt(my_key));
@@ -44,7 +46,9 @@ const ButtonFunction = React.forwardRef(
       <button
         style={{ ...style }}
         className={value_start ? "gridbox-locked" : "gridbox"}
-        onClick={handleClick}
+        onClick={() => {
+          onClickFunction(my_key);
+        }}
         onBlur={handleFocusAwayFunc}
         ref={ref}
       >
