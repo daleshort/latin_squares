@@ -20,16 +20,6 @@ class square_data_class {
   }
 }
 
-class GameManager extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <MyFirstGrid testing={false} squareData={this.props.squareData} />;
-  }
-}
-
 export default class MyFirstGrid extends React.Component {
   static defaultProps = {
     className: "gridlayout",
@@ -194,6 +184,15 @@ export default class MyFirstGrid extends React.Component {
   componentDidMount() {
     document.addEventListener("keydown", this.keydownHandler);
   }
+
+  // shouldComponentUpdate() {
+  //   // const square_data_init = this.initalizeSquareData();
+  //   // const layout = this.generateLayoutHighlights(square_data_init).concat(
+  //   //   this.generateLayoutGrid(square_data_init)
+  //   // );
+  //   // this.setState({ layout: layout, squares: square_data_init });
+  //   // return true;
+  // }
 
   handleClick(i) {
     console.log("click from a square:" + i);

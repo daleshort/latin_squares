@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import MyFirstGrid from "./MyFirstGrid";
-import "./MyFirstGrid.css";
+import MyFirstGridFunctional from "./MyFirstGridFunctional";
+import "./MyFirstGridFunctional.css";
 import Button from "react-bootstrap/Button";
 
 let json = require("./test_square_data.json");
@@ -88,7 +88,7 @@ class GameManager extends React.PureComponent {
           </div>
           <div className="container" id="app">
             {this.state.hasComponent && (
-              <MyFirstGrid
+              <MyFirstGridFunctional
                 testing={false}
                 squareData={this.state.squareData}
                 highlightData={this.state.highlightData}
