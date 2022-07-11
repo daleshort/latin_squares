@@ -26,7 +26,7 @@ class GameManager extends React.PureComponent {
     this.handleSetState1 = this.handleSetState1.bind(this);
     this.handleSetState2 = this.handleSetState2.bind(this);
     this.handleClearBoard = this.handleClearBoard.bind(this);
-    this.handleShowSolution = this.handleClearBoard.bind(this);
+    this.handleShowSolution = this.handleShowSolution.bind(this);
   }
 
   handleClearBoard() {
@@ -40,11 +40,11 @@ class GameManager extends React.PureComponent {
   }
 
   handleShowSolution() {
-    this.setState({ showSolution: true })
+    this.setState({ showSolution: true });
   }
 
   render() {
-    console.log("rerender main component");
+    //  console.log("rerender main component");
     return (
       <div className="App">
         <nav className="navbar">

@@ -225,7 +225,7 @@ export default function MyFirstGridFunctional({
   }
 
   function generateDOM(squares) {
-    console.log("state square data in DOM", squares);
+    // console.log("state square data in DOM", squares);
 
     var number_items = Object.keys(squares).length;
     const list_items = [];
@@ -246,13 +246,13 @@ export default function MyFirstGridFunctional({
           showSolution={showSolution}
         />
       );
-    console.log("dom", list_items);
+    //  console.log("dom", list_items);
     return list_items;
   }
 
   function generateHighlightDOM(highlight_data) {
     const highlightDOM = [];
-    console.log("high light state: ", state.highlightData);
+    //  console.log("high light state: ", state.highlightData);
     for (
       let index = 0;
       index < Object.keys(state.highlightData).length;
