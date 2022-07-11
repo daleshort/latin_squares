@@ -38,7 +38,6 @@ export default function MyFirstGridFunctional({
   console.log("highlight test data loaded: ", highlightData);
   //https://dmitripavlutin.com/dont-overuse-react-usecallback/
   const handleFocusAway = useCallback((square) => {
-    console.log("focus lost: ", square);
     const copy_squares = state.square_data.slice();
     copy_squares.map((x, i) => {
       if (x.isSelected == true) {
@@ -72,6 +71,20 @@ export default function MyFirstGridFunctional({
   );
 
   console.log("layout", layout);
+
+  //This is broken gotta figure out why
+  // useEffect(() => {
+  //   //initialize square data
+  //   setState({
+  //     square_data: initalizeSquareData(testing, testinggridqty, squareData),
+
+  //     layout: generateLayoutHighlights(highlightData).concat(
+  //       generateLayoutGrid(
+  //         initalizeSquareData(testing, testinggridqty, squareData)
+  //       )
+  //     ),
+  //   });
+  // }, [squareData, highlightData]);
 
   //Key press suppport________________
 
@@ -107,7 +120,6 @@ export default function MyFirstGridFunctional({
 
   //click support_________________________
   function handleClick(i) {
-    console.log("click from a square:" + i);
     const copy_squares = state.square_data.slice(); //copy entire square class array
     copy_squares.map((x, i) => {
       x.isSelected = false;
@@ -169,34 +181,6 @@ export default function MyFirstGridFunctional({
     }
     return filledSquares;
   }
-
-  //need to fix
-
-  //need to fix
-  //function keydownHandler(event) {
-  // const copy_squares = squares.slice();
-  // try {
-  //   if ("1234567890".includes(event.key)) {
-  //     console.log("key press:" + event.key);
-  //     copy_squares.map((x, i) => {
-  //       if (x.isSelected == true) {
-  //         x.value = event.key;
-  //       }
-  //       return x;
-  //     });
-  //   } else {
-  //     copy_squares.map((x, i) => {
-  //       if (x.isSelected == true) {
-  //         x.value = "";
-  //       }
-  //       return x;
-  //     });
-  //   }
-  //   updateSquareData(copy_squares);
-  // } catch (error) {
-  //   console.log("error accessing state");
-  // }
-  //}
 
   function generateLayoutGrid(square_data) {
     var number_items = Object.keys(square_data).length;
