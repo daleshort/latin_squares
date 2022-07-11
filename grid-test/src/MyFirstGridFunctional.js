@@ -63,6 +63,7 @@ export default function MyFirstGridFunctional({
           my_row={squareData[i].row}
           my_col={squareData[i].col}
           isSelected={squareData[i].isSelected}
+          isInHighlight={squareData[i].isInHighlight}
           value_start={squareData[i].value_start}
           value_correct={squareData[i].value_correct}
           onClickFunction={squareData[i].square_click_handler}
@@ -76,15 +77,14 @@ export default function MyFirstGridFunctional({
 
   function generateHighlightDOM() {
     if (Object.keys(layoutHighlights).length == 0) {
-      console.log("im in the do noting");
     } else {
       const highlightDOM = [];
-      console.log("im in highlight DOM and highlight data is:", highlightData);
       for (let index = 0; index < Object.keys(highlightData).length; index++) {
         const element = highlightData[index];
-        //need to add support for highlight class name being generated
+        const className =
+          "box-" + element.type + (element.isHighlighted ? "-highlight" : "");
         highlightDOM.push(
-          <div className="boxHighlight" key={element.id.toString()} />
+          <div className={className} key={element.id.toString()} />
         );
       }
       return highlightDOM;
@@ -93,8 +93,6 @@ export default function MyFirstGridFunctional({
 
   //we could watch the state of layout, and if layout is empty we just kill the dom with it
 
-  console.log("layoutHighlight is", layoutSquares.concat(layoutHighlights));
-  console.log("dom will be: ", generateHighlightDOM());
   return (
     <ReactGridLayout
       layout={layoutSquares.concat(layoutHighlights)}

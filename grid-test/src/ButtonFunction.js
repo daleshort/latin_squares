@@ -21,6 +21,7 @@ const ButtonFunction = React.forwardRef(
       my_row,
       my_col,
       isSelected,
+      isInHighlight,
       onClickFunction,
       value,
       handleFocusAwayFunction,
@@ -35,14 +36,12 @@ const ButtonFunction = React.forwardRef(
       // if the start value is occupied, display startvalue:
       // else if flag for showSolution is true, then display the correct value.
       // else display user set value
-      if( value_start != null  ) {
-        return(value_start)
-      }
-      else if (showSolution == true) {
-        return(value_correct)
-      }
-      else {
-        return(value)
+      if (value_start != null) {
+        return value_start;
+      } else if (showSolution == true) {
+        return value_correct;
+      } else {
+        return value;
       }
     }
 
@@ -50,13 +49,13 @@ const ButtonFunction = React.forwardRef(
     // if showSolution == true then "gridbox-solution"
     function setClassName() {
       if (value_start !== null) {
-        return("gridbox-locked")
-      }
-      else if (showSolution === true) {
-        return("gridbox-solution")
-      }
-      else {
-        return("gridbox")
+        return "gridbox-locked";
+      } else if (showSolution === true) {
+        return "gridbox-solution";
+      } else if (isInHighlight == true) {
+        return "gridbox-isInHighlight";
+      } else {
+        return "gridbox";
       }
     }
 

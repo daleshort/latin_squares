@@ -2,7 +2,7 @@
 .gridbox {
 
   background-color: rgba(255, 255, 255, 0);
-  border: 2px solid rgb(0, 0, 0);
+  border: 2px solid rgba(0, 0, 0, 0);
   margin: 0;
   padding:0;
   box-sizing: border-box;
@@ -11,8 +11,47 @@
 
 }
 
+.gridbox-isInHighlight {
+  color:black;
+
+}
+
+.box-primary {
+  box-sizing: border-box;
+  background-color:#ffffff00;
+  border: 6px solid #fda0004c;
+  margin: 6;
+  padding:2;
+  /* box-sizing: border-box; */
+}
+.box-primary-highlight {
+  box-sizing: border-box;
+  background-color:#fda000;
+  border: 6px solid #fda000;
+  margin: 6;
+  padding:2;
+  /* box-sizing: border-box; */
+}
+.box-secondary {
+  box-sizing: border-box;
+  background-color: #ffffff00;
+  border: 5px solid #00000088;
+  margin: 3;
+  padding:2;
+  /* box-sizing: border-box; */
+}
+.box-secondary-highlight {
+  box-sizing: border-box;
+  background-color: #ffffff4e;
+  border: 5px solid #ffffff;
+  margin: 3;
+  padding:2;
+  /* box-sizing: border-box; */
+}
+
 .gridbox:focus{
-  background-color: rgba(255, 174, 0, 0.301);
+  background-color: rgba(255, 255, 255, 0.548);
+  color:black;
   outline: none;
 } 
 
@@ -20,6 +59,7 @@
 
   background-color: rgba(255, 255, 255, 0.2);
   border: 2px solid rgb(0, 0, 0);
+  border-radius: 4px;
   margin: 0;
   padding:0;
   box-sizing: border-box;
@@ -34,7 +74,7 @@
   border-radius: 100%;
   margin: 0;
   padding:0;
-  box-sizing: border-box;
+  box-sizing: content-box;
   color:white;
   font-size: large;
 }
@@ -56,14 +96,8 @@
   border-radius: 10px;
 }
 
-.boxHighlight {
 
-  background-color: #ffffff00;
-  border: 5px solid #000000;
-  margin: 3;
-  padding:2;
-  /* box-sizing: border-box; */
-}
+
 
 /* .dokubox1{
   background-color: rgba(255, 255, 255, 0.8);
