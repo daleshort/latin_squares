@@ -36,7 +36,18 @@ export default function MyFirstGridFunctional({
 }) {
   console.log("json test data loaded", squareData);
   console.log("highlight test data loaded: ", highlightData);
-
+  //https://dmitripavlutin.com/dont-overuse-react-usecallback/
+  const handleFocusAway = useCallback((square) => {
+    console.log("focus lost: ", square);
+    const copy_squares = state.square_data.slice();
+    copy_squares.map((x, i) => {
+      if (x.isSelected == true) {
+        x.isSelected = false;
+      }
+      return x;
+    });
+    setState({ square_data: copy_squares });
+  }, []);
   // https://stackoverflow.com/questions/53574614/multiple-calls-to-state-updater-from-usestate-in-component-causes-multiple-re-re
 
   //initialize square data
@@ -64,7 +75,7 @@ export default function MyFirstGridFunctional({
 
   //Key press suppport________________
 
-  document.addEventListener("keydown", keydownHandler);
+  //document.addEventListener("keydown", keydownHandler);
   //https://stackoverflow.com/questions/55565444/how-to-register-event-with-useeffect-hooks
   const handleUserKeyPress = useCallback((event) => {
     const copy_squares = state.square_data.slice();
@@ -160,43 +171,32 @@ export default function MyFirstGridFunctional({
   }
 
   //need to fix
-  function handleFocusAway(square_reporting) {
-    // console.log("focus lost: ", square_reporting);
-    // const copy_squares = squares.slice();
-    // copy_squares.map((x, i) => {
-    //   if (x.isSelected == true) {
-    //     x.isSelected = false;
-    //   }
-    //   return x;
-    // });
-    // updateSquareData(copy_squares);
-  }
 
   //need to fix
-  function keydownHandler(event) {
-    // const copy_squares = squares.slice();
-    // try {
-    //   if ("1234567890".includes(event.key)) {
-    //     console.log("key press:" + event.key);
-    //     copy_squares.map((x, i) => {
-    //       if (x.isSelected == true) {
-    //         x.value = event.key;
-    //       }
-    //       return x;
-    //     });
-    //   } else {
-    //     copy_squares.map((x, i) => {
-    //       if (x.isSelected == true) {
-    //         x.value = "";
-    //       }
-    //       return x;
-    //     });
-    //   }
-    //   updateSquareData(copy_squares);
-    // } catch (error) {
-    //   console.log("error accessing state");
-    // }
-  }
+  //function keydownHandler(event) {
+  // const copy_squares = squares.slice();
+  // try {
+  //   if ("1234567890".includes(event.key)) {
+  //     console.log("key press:" + event.key);
+  //     copy_squares.map((x, i) => {
+  //       if (x.isSelected == true) {
+  //         x.value = event.key;
+  //       }
+  //       return x;
+  //     });
+  //   } else {
+  //     copy_squares.map((x, i) => {
+  //       if (x.isSelected == true) {
+  //         x.value = "";
+  //       }
+  //       return x;
+  //     });
+  //   }
+  //   updateSquareData(copy_squares);
+  // } catch (error) {
+  //   console.log("error accessing state");
+  // }
+  //}
 
   function generateLayoutGrid(square_data) {
     var number_items = Object.keys(square_data).length;
@@ -249,7 +249,7 @@ export default function MyFirstGridFunctional({
           value_start={squares[i].value_start}
           value_correct={squares[i].value_correct}
           onClickFunction={squares[i].square_click_handler}
-          handleFocusAway={squares[i].handleFocusAway}
+          handleFocusAwayFunction={squares[i].handleFocusAway}
           className="gridbox"
         />
       );

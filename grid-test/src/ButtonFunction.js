@@ -23,45 +23,31 @@ const ButtonFunction = React.forwardRef(
       isSelected,
       onClickFunction,
       value,
-      handleFocusAway,
+      handleFocusAwayFunction,
       value_correct,
       value_start,
       ...props
     },
     ref
   ) => {
-    // const [count, setCount] = useState(0);
-    // function useHandleClick() {
-    //   useEffect(() => {
-    //     // console.log("click in button component");
-    //     onClickFunction(parseInt(my_key));
-    //   });
-    // }
-
-    const handleFocusAwayFunc = () => {
-      handleFocusAway(parseInt(my_key));
-    };
-
     return (
       <button
         style={{ ...style }}
         className={value_start ? "gridbox-locked" : "gridbox"}
         onClick={() => {
           onClickFunction(my_key);
+          //     handleFocusAwayFunction(my_key);
         }}
-        onBlur={handleFocusAwayFunc}
+        onBlur={() => {
+          // onClickFunction(my_key);
+          console.log("focus lost in component");
+          handleFocusAwayFunction(my_key);
+        }}
         ref={ref}
       >
         {value_start ? value_start : value}
       </button>
     );
-    // return (
-    //   <div style={{ ...style }} className="gridbox" ref={ref}>
-    //     <Button className="gridbox" onClick={handleClick}>
-    //       {my_col},{my_row}
-    //     </Button>
-    //   </div>
-    // );
   }
 );
 
