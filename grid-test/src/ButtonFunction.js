@@ -46,10 +46,24 @@ const ButtonFunction = React.forwardRef(
       }
     }
 
+    // if value_start is not null, "gridbox-locked" otherwise "gridbox"
+    // if showSolution == true then "gridbox-solution"
+    function setClassName() {
+      if (value_start == true) {
+        return("gridbox-locked")
+      }
+      else if (showSolution === true) {
+        return("gridbox-solution")
+      }
+      else {
+        return("gridbox")
+      }
+    }
+
     return (
       <button
         style={{ ...style }}
-        className={value_start ? "gridbox-locked" : "gridbox"}
+        className={setClassName()}
         onClick={() => {
           onClickFunction(my_key);
           //     handleFocusAwayFunction(my_key);

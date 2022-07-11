@@ -28,6 +28,17 @@
 
 }
 
+.gridbox-solution {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgb(255, 0, 0);
+  border-radius: 100%;
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+  color:rgb(0, 0, 0);
+  font-size: large;
+}
+
 .gridbox-locked:focus{
   outline: none;
 } 
