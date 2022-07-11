@@ -10,81 +10,30 @@ import ButtonFunction from "./ButtonFunction.js";
  -> fill in some blanks of things like the click handler -> this becomes my state
  -> when the board renders -> set the squares with the right state - > @Button display a squares state
 
-
-
-
+should work like: Game manager gets a board from JSON.  It then fills in the blanks of the squares 
+(like saying what callbacks to use).  it then generates a layout template, this all gets passed down to the board
 
 */
 
 const ReactGridLayout = WidthProvider(RGL);
 
-class square_data_class {
-  constructor() {
-    const value = null; //current value of square
-    const value_correct = null; //answer
-    const value_start = null; // value prepopulated on the board.  if set square will not be editable
-    const id = "";
-    const row = null;
-    const col = null;
-    const isSelected = false;
-    const square_click_handler = null;
-    const handleFocusAway = null;
-  }
-}
-
 export default function MyFirstGridFunctional({
+  //start layout specific properties
   className = "gridlayout",
   isDraggable = false,
   isResizable = false,
-  cols = 9,
-  rowHeight = 40,
+  cols = 9, // this makes a 9x9 grid for us to draw on
+  rowHeight = 40, //This is the row height.  Has to be adjusted to make square
   onLayoutChange = function () {},
   margin = [0, 0],
   autoSize = false,
-  testing = false,
-  testinggridqty = 16,
-  squareData,
-  highlightData,
-  showSolution = false,
+  //start game properties
+  squareData, // data for each square
+  highlightData, // highlight data
+  layoutSquares,
+  layoutHighlights,
+  showSolution = false, //flag that needs to go away for if solutions should be shown
 }) {
-  console.log("json test data loaded", squareData);
-  console.log("highlight test data loaded: ", highlightData);
-  //https://dmitripavlutin.com/dont-overuse-react-usecallback/
-  const handleFocusAway = useCallback((square) => {
-    const copy_squares = state.square_data.slice();
-    copy_squares.map((x, i) => {
-      if (x.isSelected == true) {
-        x.isSelected = false;
-      }
-      return x;
-    });
-    setState({ square_data: copy_squares });
-  }, []);
-  // https://stackoverflow.com/questions/53574614/multiple-calls-to-state-updater-from-usestate-in-component-causes-multiple-re-re
-
-  //initialize square data
-  const initalsquaredata = initalizeSquareData(
-    testing,
-    testinggridqty,
-    squareData
-  );
-
-  const layout = generateLayoutHighlights(highlightData).concat(
-    generateLayoutGrid(initalsquaredata)
-  );
-
-  const [state, setState] = useReducer(
-    (state, newState) => ({ ...state, ...newState }),
-    {
-      square_data: initalsquaredata,
-      keypress: "",
-      layout: layout,
-      highlightData: highlightData,
-    }
-  );
-
-  console.log("layout", layout);
-
   //This is broken gotta figure out why
   // useEffect(() => {
   //   //initialize square data
@@ -99,167 +48,37 @@ export default function MyFirstGridFunctional({
   //   });
   // }, [squareData, highlightData]);
 
-  //Key press suppport________________
-
-  //document.addEventListener("keydown", keydownHandler);
-  //https://stackoverflow.com/questions/55565444/how-to-register-event-with-useeffect-hooks
-  const handleUserKeyPress = useCallback((event) => {
-    const copy_squares = state.square_data.slice();
-    if ("1234567890".includes(event.key)) {
-      console.log("key press:" + event.key);
-      copy_squares.map((x, i) => {
-        if (x.isSelected == true) {
-          x.value = event.key;
-        }
-        return x;
-      });
-    } else {
-      copy_squares.map((x, i) => {
-        if (x.isSelected == true) {
-          x.value = "";
-        }
-        return x;
-      });
-    }
-    setState({ square_data: copy_squares });
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleUserKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleUserKeyPress);
-    };
-  }, [handleUserKeyPress]);
-
-  //click support_________________________
-  function handleClick(i) {
-    const copy_squares = state.square_data.slice(); //copy entire square class array
-    copy_squares.map((x, i) => {
-      x.isSelected = false;
-      return x;
-    });
-    copy_squares[parseInt(i)].isSelected = true;
-    setState({ square_data: copy_squares });
-  }
-
-  //automatic filling of row and column (only used in testing)
-  function setRowAndColumn(copy_squares, props) {
-    var row_count = 0;
-    var col_count = 0;
-
-    for (let i = 0; i < Object.keys(copy_squares).length; i++) {
-      copy_squares[i].row = row_count;
-      copy_squares[i].col = col_count;
-      col_count++;
-
-      if (col_count >= props.cols) {
-        col_count = 0;
-        row_count++;
-      }
-    }
-
-    return copy_squares;
-  }
-
-  function initalizeSquareData(testing, testinggridqty, squareData) {
-    let filledSquares = new Array();
-    if (testing == true) {
-      //fill the square state with empty squares the dimensions of the board
-      const copy_squares = [];
-      for (let i = 0; i < testinggridqty; i++) {
-        const square = new square_data_class();
-        square.value = null;
-        square.id = i;
-        square.square_click_handler = handleClick;
-        square.handleFocusAway = handleFocusAway;
-        copy_squares.push(square);
-      }
-      //set the row and column properties automatically
-      filledSquares = setRowAndColumn(copy_squares);
-    } else {
-      for (let index = 0; index < Object.keys(squareData).length; index++) {
-        const element = squareData[index];
-        const square = new square_data_class();
-        square.value = element.value; //current value of square
-        square.value_correct = element.value_correct; //answer
-        square.value_start = element.value_start; // value prepopulated on the board.  if set square will not be editable
-        square.id = element.id;
-        square.row = element.row;
-        square.col = element.col;
-
-        square.square_click_handler = handleClick;
-        square.handleFocusAway = handleFocusAway;
-        filledSquares.push(square);
-      }
-    }
-    return filledSquares;
-  }
-
-  function generateLayoutGrid(square_data) {
-    var number_items = Object.keys(square_data).length;
-    return _.map(new Array(number_items), function (item, i) {
-      return {
-        x: square_data[i].row,
-        y: square_data[i].col,
-        w: 1,
-        h: 1,
-        i: square_data[i].id.toString(),
-      };
-    });
-  }
-
-  function generateLayoutHighlights(highlightData) {
-    var highlightLayout = [];
-    for (let index = 0; index < Object.keys(highlightData).length; index++) {
-      const element = highlightData[index];
-
-      highlightLayout.push({
-        x: parseInt(element.x),
-        y: parseInt(element.y),
-        w: parseInt(element.w),
-        h: parseInt(element.h),
-        i: element.id.toString(),
-      });
-    }
-    return highlightLayout;
-  }
-
-  function generateDOM(squares) {
+  //RF does this need to be moved up? I think not
+  function generateDOM() {
     // console.log("state square data in DOM", squares);
 
-    var number_items = Object.keys(squares).length;
+    var number_items = Object.keys(squareData).length;
     const list_items = [];
     for (let i = 0; i < number_items; i++)
       list_items.push(
         <ButtonFunction
-          my_key={squares[i].id}
-          value={squares[i].value}
-          key={squares[i].id}
-          my_row={squares[i].row}
-          my_col={squares[i].col}
-          isSelected={squares[i].isSelected}
-          value_start={squares[i].value_start}
-          value_correct={squares[i].value_correct}
-          onClickFunction={squares[i].square_click_handler}
-          handleFocusAwayFunction={squares[i].handleFocusAway}
+          my_key={squareData[i].id}
+          value={squareData[i].value}
+          key={squareData[i].id}
+          my_row={squareData[i].row}
+          my_col={squareData[i].col}
+          isSelected={squareData[i].isSelected}
+          value_start={squareData[i].value_start}
+          value_correct={squareData[i].value_correct}
+          onClickFunction={squareData[i].square_click_handler}
+          handleFocusAwayFunction={squareData[i].handleFocusAway}
           className="gridbox"
           showSolution={showSolution}
         />
       );
-    //  console.log("dom", list_items);
     return list_items;
   }
 
-  function generateHighlightDOM(highlight_data) {
+  function generateHighlightDOM() {
     const highlightDOM = [];
-    //  console.log("high light state: ", state.highlightData);
-    for (
-      let index = 0;
-      index < Object.keys(state.highlightData).length;
-      index++
-    ) {
-      const element = state.highlightData[index];
-
+    for (let index = 0; index < Object.keys(highlightData).length; index++) {
+      const element = highlightData[index];
+      //need to add support for highlight class name being generated
       highlightDOM.push(
         <div className="boxHighlight" key={element.id.toString()} />
       );
@@ -267,10 +86,10 @@ export default function MyFirstGridFunctional({
 
     return highlightDOM;
   }
-
+  console.log("layout is", layoutSquares.concat(layoutHighlights));
   return (
     <ReactGridLayout
-      layout={layout}
+      layout={layoutSquares.concat(layoutHighlights)}
       onLayoutChange={onLayoutChange}
       allowOverlap={true}
       className="gridlayout"
@@ -281,8 +100,8 @@ export default function MyFirstGridFunctional({
       margin={margin}
       autoSize={autoSize}
     >
-      {generateHighlightDOM(state.highlightData)}
-      {generateDOM(state.square_data)}
+      {generateHighlightDOM()}
+      {generateDOM()}
     </ReactGridLayout>
   );
 }
