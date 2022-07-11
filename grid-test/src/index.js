@@ -40,7 +40,7 @@ class GameManager extends React.PureComponent {
   }
 
   handleShowSolution() {
-    this.setState({ showSolution: true });
+    this.setState({ showSolution: !this.state.showSolution });
   }
 
   render() {
