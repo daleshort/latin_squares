@@ -49,7 +49,7 @@ const ButtonFunction = React.forwardRef(
     // if value_start is not null, "gridbox-locked" otherwise "gridbox"
     // if showSolution == true then "gridbox-solution"
     function setClassName() {
-      if (value_start == true) {
+      if (value_start !== null) {
         return("gridbox-locked")
       }
       else if (showSolution === true) {

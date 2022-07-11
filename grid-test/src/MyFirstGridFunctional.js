@@ -107,6 +107,7 @@ export default function MyFirstGridFunctional({
       rowHeight={rowHeight}
       margin={margin}
       autoSize={autoSize}
+      showSolution={showSolution}
     >
       {generateHighlightDOM()}
       {generateDOM()}
