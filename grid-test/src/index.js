@@ -20,11 +20,13 @@ class GameManager extends React.PureComponent {
       squareData: this.props.squareData,
       highlightData: this.props.highlightData,
       hasComponent: true,
+      showSolution: false,
     };
 
     this.handleSetState1 = this.handleSetState1.bind(this);
     this.handleSetState2 = this.handleSetState2.bind(this);
     this.handleClearBoard = this.handleClearBoard.bind(this);
+    this.handleShowSolution = this.handleClearBoard.bind(this);
   }
 
   handleClearBoard() {
@@ -35,6 +37,10 @@ class GameManager extends React.PureComponent {
   }
   handleSetState2() {
     this.setState({ squareData: this.props.squareData2 });
+  }
+
+  handleShowSolution() {
+    this.setState({ showSolution: true })
   }
 
   render() {
@@ -74,12 +80,14 @@ class GameManager extends React.PureComponent {
                 testing={false}
                 squareData={this.state.squareData}
                 highlightData={this.state.highlightData}
+                showSolution={this.state.showSolution}
               />
             )}
           </div>
           <Button onClick={this.handleSetState1}>set state 1</Button>
           <Button onClick={this.handleSetState2}>set state 2</Button>
           <Button onClick={this.handleClearBoard}>clear board</Button>
+          <Button onClick={this.handleShowSolution}>Show Solutions</Button>
         </header>
 
         <section className="boxes">

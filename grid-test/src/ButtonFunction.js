@@ -26,10 +26,26 @@ const ButtonFunction = React.forwardRef(
       handleFocusAwayFunction,
       value_correct,
       value_start,
+      showSolution,
       ...props
     },
     ref
   ) => {
+    function renderValue() {
+      // if the start value is occupied, display startvalue:
+      // else if flag for showSolution is true, then display the correct value.
+      // else display user set value
+      if( value_start != null  ) {
+        return(value_start)
+      }
+      else if (showSolution == true) {
+        return(value_correct)
+      }
+      else {
+        return(value)
+      }
+    }
+
     return (
       <button
         style={{ ...style }}
@@ -45,7 +61,7 @@ const ButtonFunction = React.forwardRef(
         }}
         ref={ref}
       >
-        {value_start ? value_start : value}
+        {renderValue()}
       </button>
     );
   }

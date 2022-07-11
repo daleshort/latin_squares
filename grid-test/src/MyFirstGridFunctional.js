@@ -45,6 +45,7 @@ export default function MyFirstGridFunctional({
   testinggridqty = 16,
   squareData,
   highlightData,
+  showSolution = false,
 }) {
   console.log("json test data loaded", squareData);
   console.log("highlight test data loaded: ", highlightData);
@@ -242,6 +243,7 @@ export default function MyFirstGridFunctional({
           onClickFunction={squares[i].square_click_handler}
           handleFocusAwayFunction={squares[i].handleFocusAway}
           className="gridbox"
+          showSolution={showSolution}
         />
       );
     console.log("dom", list_items);
