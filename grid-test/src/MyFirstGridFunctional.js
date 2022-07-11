@@ -75,18 +75,26 @@ export default function MyFirstGridFunctional({
   }
 
   function generateHighlightDOM() {
-    const highlightDOM = [];
-    for (let index = 0; index < Object.keys(highlightData).length; index++) {
-      const element = highlightData[index];
-      //need to add support for highlight class name being generated
-      highlightDOM.push(
-        <div className="boxHighlight" key={element.id.toString()} />
-      );
+    if (Object.keys(layoutHighlights).length == 0) {
+      console.log("im in the do noting");
+    } else {
+      const highlightDOM = [];
+      console.log("im in highlight DOM and highlight data is:", highlightData);
+      for (let index = 0; index < Object.keys(highlightData).length; index++) {
+        const element = highlightData[index];
+        //need to add support for highlight class name being generated
+        highlightDOM.push(
+          <div className="boxHighlight" key={element.id.toString()} />
+        );
+      }
+      return highlightDOM;
     }
-
-    return highlightDOM;
   }
-  console.log("layout is", layoutSquares.concat(layoutHighlights));
+
+  //we could watch the state of layout, and if layout is empty we just kill the dom with it
+
+  console.log("layoutHighlight is", layoutSquares.concat(layoutHighlights));
+  console.log("dom will be: ", generateHighlightDOM());
   return (
     <ReactGridLayout
       layout={layoutSquares.concat(layoutHighlights)}

@@ -255,7 +255,36 @@ function GameManagerFunctional({
       keypress: "",
       layoutSquares: intializeLayoutSquares(squareDataTest1),
       layoutHighlights: intializeLayoutHighlights(highlightDataTest1),
+      showSolution: showSolution,
     }
+  );
+
+  function handleClearBoard() {
+    setState({
+      squareData: [],
+      layoutHighlights: [],
+      layoutSquares: [],
+      hightlightData: [],
+    });
+  }
+
+  function handleSetState1() {
+    setState({ squareData: null });
+  }
+  function handleSetState2() {
+    setState({ squareData: null });
+  }
+
+  function handleShowSolution() {
+    setState({ showSolution: !state.showSolution });
+  }
+  console.log(
+    "we're in game manager and highlightData is ",
+    state.highlightData
+  );
+  console.log(
+    "we're in game manager and layouthighlight is ",
+    state.layoutHighlights
   );
 
   return (
@@ -296,10 +325,10 @@ function GameManagerFunctional({
             showSolution={state.showSolution} //remove this later
           />
         </div>
-        {/* <Button onClick={this.handleSetState1}>set state 1</Button>
-        <Button onClick={this.handleSetState2}>set state 2</Button>
-        <Button onClick={this.handleClearBoard}>clear board</Button>
-        <Button onClick={this.handleShowSolution}>Show Solutions</Button> */}
+        <Button onClick={handleSetState1}>set state 1</Button>
+        <Button onClick={handleSetState2}>set state 2</Button>
+        <Button onClick={handleClearBoard}>clear board</Button>
+        <Button onClick={handleShowSolution}>Show Solutions</Button>
       </header>
 
       <section className="boxes">
