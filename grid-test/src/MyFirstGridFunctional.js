@@ -4,6 +4,18 @@ import RGL, { WidthProvider } from "react-grid-layout";
 import "./MyFirstGridFunctional.css";
 import ButtonFunction from "./ButtonFunction.js";
 
+/* 
+
+@gamemanager[Square Data] from some json -> @grid layout [square data]
+ -> fill in some blanks of things like the click handler -> this becomes my state
+ -> when the board renders -> set the squares with the right state - > @Button display a squares state
+
+
+
+
+
+*/
+
 const ReactGridLayout = WidthProvider(RGL);
 
 class square_data_class {
@@ -211,11 +223,6 @@ export default function MyFirstGridFunctional({
     return highlightLayout;
   }
 
-  //need to fix
-  // componentDidMount() {
-  //   document.addEventListener("keydown", this.keydownHandler);
-  // }
-
   function generateDOM(squares) {
     console.log("state square data in DOM", squares);
 
@@ -255,13 +262,9 @@ export default function MyFirstGridFunctional({
         <div className="boxHighlight" key={element.id.toString()} />
       );
     }
-    // console.log("highlight DOM", state.highlightData);
+
     return highlightDOM;
   }
-
-  // function onLayoutChange(layout) {
-  //   props.onLayoutChange(layout);
-  // }
 
   return (
     <ReactGridLayout
@@ -282,52 +285,5 @@ export default function MyFirstGridFunctional({
   );
 }
 
-// //from forum pst
-// function Component({style, className, key, children, ...restOfProps}) {
-//   return (
-//     <div style={{ <styles you wish to apply> , ...style}} className={["classes you wish to apply", className].join(' ')} key={key} {...restOfProps}>
-//        //Content goes here
-//         {children}
-//     </div>
-//   );
-// }
-
-//from grid docs
-// const ButtonFunction = React.forwardRef(({style, className, ...props}, ref) => {
-//   return (
-//     <div style={{ ...style}} className="gridbox" ref={ref}>
-//       {/* Some other content */}
-//     </div>
-//   );
-// }
-
-// class MyButton extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.onClick = this.onClick.bind(this);
-//     // console.log("in constructor row is" + this.props.my_row);
-//     //console.log("in constructor col is" + this.props.my_col);
-
-//     this.state = { my_key: "", onClickFunction: null };
-
 //     //https://stackoverflow.com/questions/50862192/react-typeerror-cannot-read-property-props-of-undefined
 //   }
-
-//   componentDidMount() {}
-
-//   onClick() {
-//     this.props.onClickFunction(this.props.my_key);
-//   }
-
-//   render() {
-//     return (
-//       <Button className="dokubox1" key={this.props.key} onClick={this.onClick}>
-//         ({this.props.my_row},{this.props.my_col})
-//       </Button>
-//     );
-//   }
-// }
-
-// if (process.env.STATIC_EXAMPLES === true) {
-//   import("../test-hook.jsx").then((fn) => fn.default(NoDraggingLayout));
-// }
