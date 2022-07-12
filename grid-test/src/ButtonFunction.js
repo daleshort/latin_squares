@@ -56,8 +56,9 @@ const ButtonFunction = React.forwardRef(
         } else {
           return "gridbox-solutionNotCorrect";
         }
+      } else if (isSelected == true) {
+        return "gridbox";
       } else if (isInHighlight == true) {
-        console.log("set to highlight", my_col, ",", my_row);
         return "gridbox-isInHighlight";
       } else {
         return "gridbox";
@@ -68,13 +69,17 @@ const ButtonFunction = React.forwardRef(
       <button
         style={{ ...style }}
         className={setClassName()}
+        onFocus={() => {
+          onClickFunction(my_key);
+          //     handleFocusAwayFunction(my_key);
+        }}
         onClick={() => {
           onClickFunction(my_key);
           //     handleFocusAwayFunction(my_key);
         }}
         onBlur={() => {
           // onClickFunction(my_key);
-          console.log("focus lost in component");
+          console.log("on blur called in:", my_key);
           handleFocusAwayFunction(my_key);
         }}
         ref={ref}
