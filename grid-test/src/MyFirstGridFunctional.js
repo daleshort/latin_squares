@@ -82,7 +82,9 @@ export default function MyFirstGridFunctional({
       for (let index = 0; index < Object.keys(highlightData).length; index++) {
         const element = highlightData[index];
         const className =
-          "box-" + element.type + (element.isHighlighted ? "-highlight" : "");
+          "box-" +
+          element.type +
+          (element.isHighlighted == true ? "-highlight" : "");
         highlightDOM.push(
           <div className={className} key={element.id.toString()} />
         );

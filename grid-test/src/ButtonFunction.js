@@ -53,6 +53,7 @@ const ButtonFunction = React.forwardRef(
       } else if (showSolution === true) {
         return "gridbox-solution";
       } else if (isInHighlight == true) {
+        console.log("set to highlight", my_col, ",", my_row);
         return "gridbox-isInHighlight";
       } else {
         return "gridbox";

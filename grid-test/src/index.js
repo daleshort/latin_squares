@@ -51,8 +51,9 @@ function GameManagerFunctional({
 }) {
   //click support_________________________
   function handleClick(square_id) {
-    let copy_squares = state.squareData.slice(); //copy entire square class array
-    let copy_highlightData = state.highlightData.slice();
+    let copy_squares = { ...state.squareData };
+
+    let copy_highlightData = { ...state.highlightData };
 
     function inRange(number, min, max) {
       return number >= min && number <= max;
@@ -61,64 +62,78 @@ function GameManagerFunctional({
     //race condition?
 
     function setInHighlight(my_highlightData, my_squares) {
-      console.log("my highlight data:", my_highlightData);
+      for (
+        let square_index = 0;
+        square_index < Object.keys(my_squares).length;
+        square_index++
+      ) {
+        // loop through the squares
+        my_squares[square_index].isInHighlight = false;
+      }
 
       for (
         let index = 0;
         index < Object.keys(my_highlightData).length;
         index++
       ) {
-        let highlight = my_highlightData[index];
-        if (highlight.isHighlighted == true) {
-          console.log(" the highlight true is: ", highlight);
+        //loop through the highlights
+        let my_highlight = my_highlightData[index];
+
+        //if a square is highlighted
+        if (my_highlight.isHighlighted == true) {
+          console.log(" the highlight true is: ", my_highlight);
           for (
             let square_index = 0;
             square_index < Object.keys(my_squares).length;
             square_index++
           ) {
-            let square = my_squares[square_index];
+            // loop through the squares
+            let square = { ...my_squares[square_index] };
 
             const check_x = inRange(
               square.col,
-              highlight.x,
-              highlight.x + highlight.w - 1
+              my_highlight.x,
+              my_highlight.x + my_highlight.w - 1
             );
+            console.log(
+              "square col:",
+              square.col,
+              "range is",
+              my_highlight.x,
+              "to ",
+              my_highlight.x + my_highlight.w - 1
+            );
+            console.log("check x is ", check_x);
 
             const check_y = inRange(
               square.row,
-              highlight.y,
-              highlight.y + highlight.h - 1
+              my_highlight.y,
+              my_highlight.y + my_highlight.h - 1
             );
+            console.log("check y is", check_y);
 
-            console.log(
-              square.col,
-              "in range",
-              highlight.x,
-              "to",
-              highlight.x,
-              "+",
-              highlight.h
-            );
-
+            //if it is in the range set the highlight
             if (check_x && check_y) {
               square.isInHighlight = true;
+              console.log("square is highlighted", square.col, ",", square.row);
             } else {
-              square.isInHighlight = false;
+              //  square.isInHighlight = false;
             }
+            //update the square
             my_squares[square_index] = square;
           }
         }
-        return my_squares;
       }
+      return my_squares;
     }
 
-    function setParentHighlight(copy_highlightData, square) {
+    function setParentHighlight(working_highlightData, square) {
       for (
         let index = 0;
-        index < Object.keys(copy_highlightData).length;
+        index < Object.keys(working_highlightData).length;
         index++
       ) {
-        const highlight = copy_highlightData[index];
+        const highlight = working_highlightData[index];
         const check_x = inRange(
           square.col,
           highlight.x,
@@ -136,14 +151,17 @@ function GameManagerFunctional({
           highlight.isHighlighted = false;
         }
 
-        copy_highlightData[index] = highlight;
+        working_highlightData[index] = highlight;
       }
 
-      return copy_highlightData;
+      return working_highlightData;
     }
 
+    //a click comes in
+    //we look through the grid array to find the matching grid square
+
     for (let index = 0; index < Object.keys(copy_squares).length; index++) {
-      const element = copy_squares[index];
+      let element = copy_squares[index];
       if (square_id == element.id) {
         element.isSelected = true;
         copy_highlightData = setParentHighlight(copy_highlightData, element);
@@ -151,12 +169,21 @@ function GameManagerFunctional({
       } else {
         element.isSelected = false;
       }
+      copy_squares[index] = element;
     }
-    setState({ highlightData: copy_highlightData });
+    const squares_with_in_highlights = setInHighlight(
+      { ...copy_highlightData },
+      { ...copy_squares }
+    );
 
-    copy_squares = setInHighlight(state.highlightData, copy_squares);
-
-    setState({ squareData: copy_squares });
+    console.log(
+      "squares with highlights at end up on clic",
+      squares_with_in_highlights
+    );
+    setState({
+      squareData: squares_with_in_highlights,
+      highlightData: copy_highlightData,
+    });
   }
 
   //Key press suppport________________
