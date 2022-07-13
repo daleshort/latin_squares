@@ -57,8 +57,8 @@ ul {
 .container#app{
   background:rgb(46, 46, 46);
   min-height: 400px;
-  justify-content: center;
-  align-items: top;
+  /* justify-content: center; */
+  /* align-items: top; */
 }
 
 .navbar {

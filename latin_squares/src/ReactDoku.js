@@ -1,7 +1,12 @@
-import logo from "./logo.svg";
 import "./ReactDoku.css";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import RGL, { WidthProvider } from "react-grid-layout";
+
+//https://isamatov.com/react-grid-layout-tutorial/
+import GridLayout from "react-grid-layout";
+
+const ReactGridLayout = WidthProvider(RGL);
 
 class square_data_class {
   constructor() {
@@ -105,9 +110,17 @@ class ReactDoku extends React.Component {
       button_array.push(
         <MyButton
           my_key={i}
+          key={i}
           //i dont think onClick is different for each button
           my_row={copy_squares[i].row}
           my_col={copy_squares[i].col}
+          data-grid={{
+            x: copy_squares[i].col,
+            y: copy_squares[i].row,
+            w: 1,
+            h: 1,
+            static: true,
+          }}
           onClickFunction={this.state.squares[i].square_click_handler}
         />
       );
@@ -119,11 +132,17 @@ class ReactDoku extends React.Component {
   render() {
     console.log("state going into render", this.state.squares);
     return (
-      <div className="ReactDoku">
-        <header className="ReactDoku">
-          <div className="ReactDokuContainer">{this.loopButtons()}</div>
-        </header>
-      </div>
+      <GridLayout
+        className="layout"
+        rowHeight={20}
+        allowOverlap={false}
+        cols={4}
+        isDraggable={false}
+        isResizable={false}
+        isBounded={false}
+      >
+        {this.loopButtons()}
+      </GridLayout>
     );
   }
 }
