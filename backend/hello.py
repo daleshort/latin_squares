@@ -5,6 +5,7 @@ from itertools import product, islice
 import copy
 import random as rnd
 import json
+from typing import List, Tuple
 
 # Flask constructor takes the name of
 # current module (__name__) as argument.
@@ -80,14 +81,24 @@ class Cell:
         self.value_start = value_start
         self.value_correct = value_correct
 
+# object with keyworks (row, column, Rectangular Regions)
+class Board:
+    def __init__(self, row: Tuple[int,int], col: Tuple[int,int], regions: List[Tuple[int, int]]) -> None:
+        self.row = row
+        self.col = col
+        self.regions = regions
+
 # The route() function of the Flask class is a decorator,
 # which tells the application which URL should call
 # the associated function.
 @app.route('/')
-# ‘/’ URL is bound with hello_world() function.
-def MakePuzzle():
+# ‘/’ URL is bound with MakePuzzle() function.
+def MakePuzzle(WhatIsLatin:Board = Board((1,6),(6,1),[(2,3),(3,2)])) -> str:
     # Let's define the list of things to be latin so we can reuse it.
-    LatinList = [(1,6),(6,1),(2,3),(3,2)]
+    LatinList = [WhatIsLatin.row, WhatIsLatin.col]
+    for i in WhatIsLatin.regions:
+        LatinList.append(i)
+    print(LatinList)
 
     Order = LatinList[0][0]*LatinList[0][1]
 
@@ -152,7 +163,7 @@ def MakePuzzle():
 
 # main driver function
 if __name__ == '__main__':
-
 	# run() method of Flask class runs the application
 	# on the local development server.
-	app.run()
+    # app = MakePuzzle(Parts)
+    app.run()
