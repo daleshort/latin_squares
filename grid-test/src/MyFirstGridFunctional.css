@@ -2,57 +2,14 @@
 .gridbox {
 
   background-color: rgba(255, 255, 255, 0);
-  border: 2px solid rgba(0, 0, 0, 0);
+  border: 2px solid rgba(0, 0, 0);
   margin: 0;
   padding:0;
   box-sizing: border-box;
   color:white;
   font-size: large;
-
-}
-
-.gridbox-isInHighlight {
-  background-color: rgba(255, 255, 255, 0);
-  border: 2px solid rgba(0, 0, 0, 0);
-  margin: 0;
-  padding:0;
-  box-sizing: border-box;
-  font-size: large;
-  color:black;
-
-}
-
-.box-primary {
-  box-sizing: border-box;
-  background-color:#ffffff00;
-  border: 6px solid #fda0006f;
-  margin: 6;
-  padding:2;
-  /* box-sizing: border-box; */
-}
-.box-primary-highlight {
-  box-sizing: border-box;
-  background-color:#fda000bc;
-  border: 6px solid #ff9900;
-  margin: 6;
-  padding:2;
-  /* box-sizing: border-box; */
-}
-.box-secondary {
-  box-sizing: border-box;
-  background-color: #ffffff00;
-  border: 5px solid #00000088;
-  margin: 3;
-  padding:2;
-  /* box-sizing: border-box; */
-}
-.box-secondary-highlight {
-  box-sizing: border-box;
-  background-color: #ffffff4e;
-  border: 5px solid #ffffff;
-  margin: 3;
-  padding:2;
-  /* box-sizing: border-box; */
+  width:40px;
+  height: 40px;
 }
 
 .gridbox:focus{
@@ -71,8 +28,58 @@
   box-sizing: border-box;
   color:rgb(0, 0, 0);
   font-size: large;
+  width:40px;
+  height: 40px;
 
 }
+
+.gridbox-isInHighlight {
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid rgba(0, 0, 0, 0);
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+  font-size: large;
+  color:black;
+  width:40px;
+  height: 40px;
+
+}
+
+.box-primary {
+  box-sizing: border-box;
+  background-color:#ffffff00;
+  border: 6px solid #fda0006f;
+  height: 100%;
+  width: 100%;
+  /* box-sizing: border-box; */
+}
+.box-primary-highlight {
+  box-sizing: border-box;
+  background-color:#fda000bc;
+  border: 6px solid #ff9900;
+  height: 100%;
+  width: 100%;
+
+  /* box-sizing: border-box; */
+}
+.box-secondary {
+  box-sizing: border-box;
+  background-color: #ffffff00;
+  border: 5px solid #00000088;
+  height: 100%;
+  width: 100%;
+  /* box-sizing: border-box; */
+}
+.box-secondary-highlight {
+  box-sizing: border-box;
+  background-color: #ffffff4e;
+  border: 5px solid #ffffff;
+  height: 100%;
+  width: 100%;
+  /* box-sizing: border-box; */
+}
+
 
 .gridbox-solutionCorrect {
   background-color: rgba(255, 255, 255, 0);

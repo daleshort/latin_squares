@@ -1,9 +1,10 @@
-import React, { useReducer, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import MyFirstGridFunctional from "./MyFirstGridFunctional";
 import "./MyFirstGridFunctional.css";
+import Button from "react-bootstrap/Button";
 
 let squareDataTest1 = require("./test_square_data.json");
 let squareDataTest2 = require("./test_square_data2.json");
@@ -50,190 +51,198 @@ function GameManagerFunctional({
 }) {
   //click support_________________________
 
-  // function setInHighlight(my_highlightData, my_squares) {
-  //   for (
-  //     let square_index = 0;
-  //     square_index < Object.keys(my_squares).length;
-  //     square_index++
-  //   ) {
-  //     // loop through the squares
-  //     my_squares[square_index].isInHighlight = false;
-  //   }
+  function setInHighlight(my_highlightData, my_squares) {
+    for (
+      let square_index = 0;
+      square_index < Object.keys(my_squares).length;
+      square_index++
+    ) {
+      // loop through the squares
+      my_squares[square_index].isInHighlight = false;
+    }
 
-  //   for (let index = 0; index < Object.keys(my_highlightData).length; index++) {
-  //     //loop through the highlights
-  //     let my_highlight = my_highlightData[index];
+    for (let index = 0; index < Object.keys(my_highlightData).length; index++) {
+      //loop through the highlights
+      let my_highlight = my_highlightData[index];
 
-  //     //if a square is highlighted
-  //     if (my_highlight.isHighlighted == true) {
-  //       for (
-  //         let square_index = 0;
-  //         square_index < Object.keys(my_squares).length;
-  //         square_index++
-  //       ) {
-  //         // loop through the squares
-  //         let square = { ...my_squares[square_index] };
-  //         const check_x = inRange(
-  //           square.col,
-  //           my_highlight.x,
-  //           my_highlight.x + my_highlight.w - 1
-  //         );
-  //         const check_y = inRange(
-  //           square.row,
-  //           my_highlight.y,
-  //           my_highlight.y + my_highlight.h - 1
-  //         );
-  //         //if it is in the range set the highlight
-  //         if (check_x && check_y) {
-  //           square.isInHighlight = true;
-  //         } else {
-  //           //  square.isInHighlight = false;
-  //         }
-  //         //update the square
-  //         my_squares[square_index] = square;
-  //       }
-  //     }
-  //   }
-  //   return my_squares;
-  // }
+      //if a square is highlighted
+      if (my_highlight.isHighlighted == true) {
+        for (
+          let square_index = 0;
+          square_index < Object.keys(my_squares).length;
+          square_index++
+        ) {
+          // loop through the squares
+          let square = { ...my_squares[square_index] };
+          const check_x = inRange(
+            square.col,
+            my_highlight.x,
+            my_highlight.x + my_highlight.w - 1
+          );
+          const check_y = inRange(
+            square.row,
+            my_highlight.y,
+            my_highlight.y + my_highlight.h - 1
+          );
+          //if it is in the range set the highlight
+          if (check_x && check_y) {
+            square.isInHighlight = true;
+          } else {
+            //  square.isInHighlight = false;
+          }
+          //update the square
+          my_squares[square_index] = square;
+        }
+      }
+    }
+    return my_squares;
+  }
 
-  // function inRange(number, min, max) {
-  //   return number >= min && number <= max;
-  // }
+  function inRange(number, min, max) {
+    return number >= min && number <= max;
+  }
 
-  // const handleClick = useCallback((square_id) => {
-  //   let copy_squares = { ...state.squareData };
+  function handleClick(square_id) {
+    let copy_state = { ...state };
+    let copy_squares = copy_state.squareData;
+    let copy_highlightData = copy_state.highlightData;
+    console.log("click from square", square_id);
 
-  //   let copy_highlightData = { ...state.highlightData };
+    function setParentHighlight(working_highlightData, square) {
+      for (
+        let index = 0;
+        index < Object.keys(working_highlightData).length;
+        index++
+      ) {
+        const highlight = working_highlightData[index];
+        const check_x = inRange(
+          square.col,
+          highlight.x,
+          highlight.x + highlight.w - 1
+        );
 
-  //   //race condition?
+        const check_y = inRange(
+          square.row,
+          highlight.y,
+          highlight.y + highlight.h - 1
+        );
+        if (check_x && check_y) {
+          highlight.isHighlighted = true;
+        } else {
+          highlight.isHighlighted = false;
+        }
 
-  //   function setParentHighlight(working_highlightData, square) {
-  //     for (
-  //       let index = 0;
-  //       index < Object.keys(working_highlightData).length;
-  //       index++
-  //     ) {
-  //       const highlight = working_highlightData[index];
-  //       const check_x = inRange(
-  //         square.col,
-  //         highlight.x,
-  //         highlight.x + highlight.w - 1
-  //       );
+        working_highlightData[index] = highlight;
+      }
 
-  //       const check_y = inRange(
-  //         square.row,
-  //         highlight.y,
-  //         highlight.y + highlight.h - 1
-  //       );
-  //       if (check_x && check_y) {
-  //         highlight.isHighlighted = true;
-  //       } else {
-  //         highlight.isHighlighted = false;
-  //       }
+      return working_highlightData;
+    }
 
-  //       working_highlightData[index] = highlight;
-  //     }
+    //a click comes in
+    //we look through the grid array to find the matching grid square
 
-  //     return working_highlightData;
-  //   }
+    for (let index = 0; index < Object.keys(copy_squares).length; index++) {
+      let element = copy_squares[index];
+      if (square_id == element.id) {
+        element.isSelected = true;
+        copy_highlightData = setParentHighlight(copy_highlightData, element);
+        // call the highlight relevant squares here
+      } else {
+        element.isSelected = false;
+      }
+      copy_squares[index] = element;
+    }
+    const squares_with_in_highlights = setInHighlight(
+      { ...copy_highlightData },
+      { ...copy_squares }
+    );
+    copy_state.squareData = squares_with_in_highlights;
+    copy_state.highlightData = copy_highlightData;
+    setState(copy_state);
+  }
 
-  //   //a click comes in
-  //   //we look through the grid array to find the matching grid square
+  // Key press suppport________________
+  // https://stackoverflow.com/questions/55565444/how-to-register-event-with-useeffect-hooks
+  const handleUserKeyPress = useCallback((event) => {
+    let copy_state = { ...state };
+    let copy_squares = copy_state.squareData;
+    let copy_highlightData = copy_state.highlightData;
 
-  //   for (let index = 0; index < Object.keys(copy_squares).length; index++) {
-  //     let element = copy_squares[index];
-  //     if (square_id == element.id) {
-  //       element.isSelected = true;
-  //       copy_highlightData = setParentHighlight(copy_highlightData, element);
-  //       // call the highlight relevant squares here
-  //     } else {
-  //       element.isSelected = false;
-  //     }
-  //     copy_squares[index] = element;
-  //   }
-  //   const squares_with_in_highlights = setInHighlight(
-  //     { ...copy_highlightData },
-  //     { ...copy_squares }
-  //   );
-  //   setState({
-  //     squareData: squares_with_in_highlights,
-  //     highlightData: copy_highlightData,
-  //   });
-  // }, []);
+    console.log("keypress is ", event.key);
+    if ("1234567890".includes(event.key)) {
+      for (
+        let square_index = 0;
+        square_index < Object.keys(copy_squares).length;
+        square_index++
+      ) {
+        let x = copy_squares[square_index];
+        if (x.isSelected == true) {
+          x.value = event.key;
+        }
+        copy_squares[square_index] = x;
+      }
+    } else {
+      for (
+        let square_index = 0;
+        square_index < Object.keys(copy_squares).length;
+        square_index++
+      ) {
+        let x = copy_squares[square_index];
+        if (x.isSelected == true) {
+          x.value = "";
+        }
+        copy_squares[square_index] = x;
+      }
+    }
 
-  //Key press suppport________________
-  //https://stackoverflow.com/questions/55565444/how-to-register-event-with-useeffect-hooks
-  // const handleUserKeyPress = useCallback((event) => {
-  //   let copy_squares = { ...state.squareData };
-  //   let copy_highlightData = { ...state.highlightData };
-  //   if ("1234567890".includes(event.key)) {
-  //     for (
-  //       let square_index = 0;
-  //       square_index < Object.keys(copy_squares).length;
-  //       square_index++
-  //     ) {
-  //       let x = copy_squares[square_index];
-  //       if (x.isSelected == true) {
-  //         x.value = event.key;
-  //       }
-  //       copy_squares[square_index] = x;
-  //     }
-  //   } else {
-  //     for (
-  //       let square_index = 0;
-  //       square_index < Object.keys(copy_squares).length;
-  //       square_index++
-  //     ) {
-  //       let x = copy_squares[square_index];
-  //       if (x.isSelected == true) {
-  //         x.value = "";
-  //       }
-  //       copy_squares[square_index] = x;
-  //     }
-  //   }
+    copy_squares = setInHighlight(copy_highlightData, copy_squares);
+    copy_state.squareData = copy_squares;
+    setState(state);
+  }, []);
 
-  //   copy_squares = setInHighlight(copy_highlightData, copy_squares);
+  useEffect(() => {
+    window.addEventListener("keydown", handleUserKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleUserKeyPress);
+    };
+  }, [handleUserKeyPress]);
 
-  //   setState({ squareData: copy_squares });
-  // }, []);
+  const handleFocusAway = useCallback((square) => {
+    let copy_state = { ...state };
+    let copy_squares = copy_state.squareData;
+    let copy_highlightData = copy_state.highlightData;
 
-  // useEffect(() => {
-  //   window.addEventListener("keydown", handleUserKeyPress);
-  //   return () => {
-  //     window.removeEventListener("keydown", handleUserKeyPress);
-  //   };
-  // }, [handleUserKeyPress]);
+    for (
+      let square_index = 0;
+      square_index < Object.keys(copy_squares).length;
+      square_index++
+    ) {
+      let x = copy_squares[square_index];
+      if (x.isSelected == true) {
+        x.isSelected = false;
+      }
+      copy_squares[square_index] = x;
+    }
 
-  //Focus away support_______________________
+    for (
+      let index = 0;
+      index < Object.keys(copy_highlightData).length;
+      index++
+    ) {
+      copy_highlightData[index].isHighlighted = false;
+    }
+    copy_state.squareData = copy_squares;
+    copy_state.highlightData = copy_highlightData;
+    setState(state);
+  }, []);
 
-  //this has a bug where it's not doing anything with the value passed back to it
-  // const handleFocusAway = useCallback((square) => {
-  //   let copy_squares = { ...state.squareData };
-  //   let copy_highlightData = { ...state.highlightData };
-
-  //   for (
-  //     let square_index = 0;
-  //     square_index < Object.keys(copy_squares).length;
-  //     square_index++
-  //   ) {
-  //     let x = copy_squares[square_index];
-  //     if (x.isSelected == true) {
-  //       x.isSelected = false;
-  //     }
-  //     copy_squares[square_index] = x;
-  //   }
-
-  //   for (
-  //     let index = 0;
-  //     index < Object.keys(copy_highlightData).length;
-  //     index++
-  //   ) {
-  //     copy_highlightData[index].isHighlighted = false;
-  //   }
-
-  //   setState({ squareData: copy_squares, highlightData: copy_highlightData });
-  // }, []);
+  const [state, setState] = useState({
+    squareData: intializeSquareData(squareDataTest1),
+    highlightData: intializeHighlightData(highlightDataTest1),
+    keypress: "",
+    loadCount: 0,
+    showSolution: showSolution,
+  });
 
   function intializeSquareData(JsonData) {
     let squares_array = new Array();
@@ -247,8 +256,8 @@ function GameManagerFunctional({
       square.row = element.row;
       square.col = element.col;
 
-      square.square_click_handler = null; //handleClick;
-      square.handleFocusAway = null; //handleFocusAway;
+      square.square_click_handler = handleClick;
+      square.handleFocusAway = handleFocusAway;
       squares_array.push(square);
     }
     return squares_array;
@@ -272,102 +281,56 @@ function GameManagerFunctional({
     return highlight_array;
   }
 
-  // function intializeLayoutSquares(JsonData) {
-  //   let layout_array = new Array();
-  //   for (let index = 0; index < Object.keys(JsonData).length; index++) {
-  //     const element = JsonData[index];
-  //     //now make the layout
-  //     layout_array.push({
-  //       x: parseInt(element.col),
-  //       y: parseInt(element.row),
-  //       w: 1,
-  //       h: 1,
-  //       i: element.id.toString(),
-  //     });
-  //   }
-  //   return layout_array;
-  // }
-
-  //this could easily be merged with the function above
-  // function intializeLayoutHighlights(JsonData) {
-  //   let layout_array = new Array();
-
-  //   for (let index = 0; index < Object.keys(JsonData).length; index++) {
-  //     const element = JsonData[index];
-
-  //     //now make the layout
-  //     layout_array.push({
-  //       x: parseInt(element.x),
-  //       y: parseInt(element.y),
-  //       w: parseInt(element.w),
-  //       h: parseInt(element.h),
-  //       i: element.id.toString(),
-  //     });
-  //   }
-  //   return layout_array;
-  // }
-
   // https://stackoverflow.com/questions/53574614/multiple-calls-to-state-updater-from-usestate-in-component-causes-multiple-re-re
 
-  const [state, setState] = useReducer(
-    (state, newState) => ({ ...state, ...newState }),
-    {
-      squareData: intializeSquareData(squareDataTest1),
-      highlightData: intializeHighlightData(highlightDataTest1),
-      keypress: "",
-      // layoutSquares: intializeLayoutSquares(squareDataTest1),
-      // layoutHighlights: intializeLayoutHighlights(highlightDataTest1),
-      showSolution: showSolution,
+  function handleClearBoard() {
+    let copy_state = { ...state };
+
+    copy_state.squareData = [];
+    copy_state.highlightData = [];
+    setState(copy_state);
+  }
+
+  function handleSetState1() {
+    let copy_state = { ...state };
+
+    copy_state.loadCount = copy_state.loadCount + 1;
+    copy_state.intializeSquareData = intializeSquareData(squareDataTest1);
+    copy_state.highlightData = intializeHighlightData(highlightDataTest1);
+    copy_state.keypress = "";
+
+    setState(copy_state);
+  }
+  function handleSetState2() {
+    let copy_state = { ...state };
+
+    copy_state.loadCount = copy_state.loadCount + 1;
+    copy_state.intializeSquareData = intializeSquareData(squareDataTest2);
+    copy_state.highlightData = intializeHighlightData(highlightDataTest2);
+    copy_state.keypress = "";
+
+    setState(copy_state);
+  }
+
+  function handleResetBoardValues() {
+    let copy_state = { ...state };
+    let copy_squares = copy_state.squareData;
+    for (
+      let square_index = 0;
+      square_index < Object.keys(copy_squares).length;
+      square_index++
+    ) {
+      // loop through the squares
+      copy_squares[square_index].value = null;
     }
-  );
+    copy_state.squareData = copy_squares;
+    setState(copy_state);
+  }
 
-  // function handleClearBoard() {
-  //   setState({
-  //     squareData: [],
-  //     // layoutHighlights: [],
-  //     // layoutSquares: [],
-  //     hightlightData: [],
-  //   });
-  // }
-
-  // function handleSetState1() {
-  //   const square_data_init = intializeSquareData(squareDataTest1);
-  //   setState({
-  //     squareData: intializeSquareData(squareDataTest1),
-  //     highlightData: intializeHighlightData(highlightDataTest1),
-  //     keypress: "",
-  //   });
-
-  //   handleResetBoardValues();
-  // }
-  // function handleSetState2() {
-  //   // make state 2 match
-  //   const square_data_init = intializeSquareData(squareDataTest2);
-  //   setState({
-  //     squareData: square_data_init,
-  //     highlightData: intializeHighlightData(highlightDataTest2),
-  //     keypress: "",
-  //   });
-
-  //   handleResetBoardValues();
-  // }
-
-  // function handleResetBoardValues() {
-  //   let copy_squares = { ...state.squareData };
-  //   for (
-  //     let square_index = 0;
-  //     square_index < Object.keys(copy_squares).length;
-  //     square_index++
-  //   ) {
-  //     // loop through the squares
-  //     copy_squares[square_index].value = null;
-  //   }
-  //   setState({ squareData: copy_squares });
-  // }
-
-  // function handleShowSolution() {
-  //   setState({ showSolution: !state.showSolution });
-  // }
+  //broken
+  function handleShowSolution() {
+    setState({ showSolution: !state.showSolution });
+  }
 
   return (
     <div className="App">
@@ -403,15 +366,16 @@ function GameManagerFunctional({
             <MyFirstGridFunctional
               squareData={state.squareData}
               highlightData={state.highlightData}
-              showSolution={state.showSolution} //remove this later
+              showSolution={state.showSolution}
+              loadCount={state.loadCount}
             />
           }
         </div>
-        {/* <Button onClick={handleSetState1}>set state 1</Button>
+        <Button onClick={handleSetState1}>set state 1</Button>
         <Button onClick={handleSetState2}>set state 2</Button>
         <Button onClick={handleClearBoard}>clear board</Button>
         <Button onClick={handleShowSolution}>Show Solutions</Button>
-        <Button onClick={handleResetBoardValues}>Clear Board Values</Button> */}
+        <Button onClick={handleResetBoardValues}>Clear Board Values</Button>
       </header>
 
       <section className="boxes">
