@@ -1,7 +1,14 @@
+# Importing flask module in the project is mandatory
+# An object of Flask class is our WSGI application.
+from flask import Flask
 from itertools import product, islice
 import copy
 import random as rnd
 import json
+
+# Flask constructor takes the name of
+# current module (__name__) as argument.
+app = Flask(__name__)
 
 def solve_sudoku(sizes, grid):
     N = len(grid)
@@ -73,15 +80,19 @@ class Cell:
         self.value_start = value_start
         self.value_correct = value_correct
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-
+# The route() function of the Flask class is a decorator,
+# which tells the application which URL should call
+# the associated function.
+@app.route('/')
+# ‘/’ URL is bound with hello_world() function.
+def MakePuzzle():
     # Let's define the list of things to be latin so we can reuse it.
     LatinList = [(1,6),(6,1),(2,3),(3,2)]
 
+    Order = LatinList[0][0]*LatinList[0][1]
+
     # Creating a random first row
-    RemainigChoices = list(range(1,LatinList[0][0]*LatinList[0][1]+1))
+    RemainigChoices = list(range(1,Order+1))
     FirstRow = []
     while RemainigChoices != []:
         NextElement = rnd.choice(RemainigChoices)
@@ -89,41 +100,27 @@ if __name__ == "__main__":
         RemainigChoices.remove(NextElement)
 
     # Initial Puzzle
-    TestPuzzle = [
-        FirstRow,
-        [0,0,0,0,0,0],
-        [0,0,0,0,0,0],
-        [0,0,0,0,0,0],
-        [0,0,0,0,0,0],
-        [0,0,0,0,0,0]
-    ]
+    TestPuzzle = [FirstRow]
+    for i in range(Order-1):
+        TestPuzzle.append([0 for i in range(Order)])
 
     UniquePuzzle = []
 
     # Pick a solution to trim from.
     WhichSol = rnd.randint(0,1935)
     TestPuzzle = solution = list(islice(solve_sudoku(LatinList,TestPuzzle),WhichSol,WhichSol+1))[0]
-    # print(list(solution)[0])
-    # puzzle = list(solution)[0]
     numOfSolutions = 1
-    # print(TestPuzzle, numOfSolutions)
     while numOfSolutions == 1:
-        # print(TestPuzzle)
         UniquePuzzle = copy.deepcopy(TestPuzzle)
-        randomRow = rnd.randint(0,5)
-        randomCol = rnd.randint(0,5)
+        randomRow = rnd.randint(0,Order-1)
+        randomCol = rnd.randint(0,Order-1)
         TestPuzzle[randomRow][randomCol] = 0
         solution = solve_sudoku(LatinList,copy.deepcopy(TestPuzzle))
-        numOfSolutions = 0
-        # print(TestPuzzle)   
+        numOfSolutions = 0 
         for sol in solution:
             numOfSolutions += 1
             if numOfSolutions > 1:
                 break
-
-    print('\nPuzzle before trimming')
-    for p in UniquePuzzle:
-        print(p)
 
     # Minimize clues in the puzzle
     TestPuzzle = copy.deepcopy(UniquePuzzle)
@@ -138,20 +135,7 @@ if __name__ == "__main__":
             else:
                 TestPuzzle = copy.deepcopy(UniquePuzzle)
 
-    print('')
-
-    print('Puzzle after trimming:')
-    for p in UniquePuzzle:
-        print(p)
-
-    print('')
-
     CorrectAnswer = list(solve_sudoku(LatinList,copy.deepcopy(UniquePuzzle)))[0]
-
-    print('solutions')
-    for s in CorrectAnswer:
-        print(s)
-    print('')
 
     # Construct List of cell objects
     ListOfCells = []
@@ -162,8 +146,13 @@ if __name__ == "__main__":
             ListOfCells.append(Cell('null',idno,i,j,'null' if UniquePuzzle[i][j] == 0 else UniquePuzzle[i][j],CorrectAnswer[i][j]))
 
     # Write to JSON file
-    jsonStr = json.dumps([ob.__dict__ for ob in ListOfCells], indent=4)
+    jsonStr = json.dumps([ob.__dict__ for ob in ListOfCells])
 
-    jsonFile = open("test_square_data.json", "w")
-    jsonFile.write(jsonStr)
-    jsonFile.close()
+    return jsonStr
+
+# main driver function
+if __name__ == '__main__':
+
+	# run() method of Flask class runs the application
+	# on the local development server.
+	app.run()
