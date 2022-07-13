@@ -34,45 +34,35 @@ export default function MyFirstGridFunctional({
   layoutHighlights,
   showSolution = false, //flag that needs to go away for if solutions should be shown
 }) {
-  //This is broken gotta figure out why
-  // useEffect(() => {
-  //   //initialize square data
-  //   setState({
-  //     square_data: initalizeSquareData(testing, testinggridqty, squareData),
+  useEffect(() => {
+    // console.log("square data", squareData);
+  }, [squareData]);
 
-  //     layout: generateLayoutHighlights(highlightData).concat(
-  //       generateLayoutGrid(
-  //         initalizeSquareData(testing, testinggridqty, squareData)
-  //       )
-  //     ),
-  //   });
-  // }, [squareData, highlightData]);
-
-  //RF does this need to be moved up? I think not
   function generateDOM() {
-    // console.log("state square data in DOM", squares);
-
-    var number_items = Object.keys(squareData).length;
-    const list_items = [];
-    for (let i = 0; i < number_items; i++)
-      list_items.push(
-        <ButtonFunction
-          my_key={squareData[i].id}
-          value={squareData[i].value}
-          key={squareData[i].id}
-          my_row={squareData[i].row}
-          my_col={squareData[i].col}
-          isSelected={squareData[i].isSelected}
-          isInHighlight={squareData[i].isInHighlight}
-          value_start={squareData[i].value_start}
-          value_correct={squareData[i].value_correct}
-          onClickFunction={squareData[i].square_click_handler}
-          handleFocusAwayFunction={squareData[i].handleFocusAway}
-          className="gridbox"
-          showSolution={showSolution}
-        />
-      );
-    return list_items;
+    if ((Object.keys(layoutSquares).length = 0)) {
+    } else {
+      var number_items = Object.keys(squareData).length;
+      const list_items = [];
+      for (let i = 0; i < number_items; i++)
+        list_items.push(
+          <ButtonFunction
+            my_key={squareData[i].id}
+            value={squareData[i].value}
+            key={squareData[i].id}
+            my_row={squareData[i].row}
+            my_col={squareData[i].col}
+            isSelected={squareData[i].isSelected}
+            isInHighlight={squareData[i].isInHighlight}
+            value_start={squareData[i].value_start}
+            value_correct={squareData[i].value_correct}
+            onClickFunction={squareData[i].square_click_handler}
+            handleFocusAwayFunction={squareData[i].handleFocusAway}
+            className="gridbox"
+            showSolution={showSolution}
+          />
+        );
+      return list_items;
+    }
   }
 
   function generateHighlightDOM() {

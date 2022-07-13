@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 // const ButtonFunction = React.forwardRef({style, className, ...props}, ref) => {
 //   return ({
@@ -32,6 +32,10 @@ const ButtonFunction = React.forwardRef(
     },
     ref
   ) => {
+    useEffect(() => {
+      //  console.log("value", value);
+    }, [value]);
+
     function renderValue() {
       // if the start value is occupied, display startvalue:
       // else if flag for showSolution is true, then display the correct value.

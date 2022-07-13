@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 let squareDataTest1 = require("./test_square_data.json");
 let squareDataTest2 = require("./test_square_data2.json");
 let highlightDataTest1 = require("./test_highlight_data.json");
-let highlightDataTest2 = require("./test_highlight_data.json"); // same file right now
+let highlightDataTest2 = require("./test_highlight_data2.json"); // same file right now
 
 class squareDataClass {
   constructor() {
@@ -23,7 +23,7 @@ class squareDataClass {
     const isInHighlight = false;
     const square_click_handler = null;
     const handleFocusAway = null;
-    const showSolution = null; //adding in show solution here for square based solution showing.  Not used yet
+    const showSolution = false; //adding in show solution here for square based solution showing.  Not used yet
   }
 }
 
@@ -308,78 +308,7 @@ function GameManagerFunctional({
     return layout_array;
   }
 
-  //do we need to useEffect tied to stat.squareData
-  //to update the layout if squareData is changed?
-
-  //take the input square data and call a function that
-  //maps the input square data to the state of squares
-  // this later should start with empty JSON but
-  //then have a fuction to go and get this JSON
-  //these modify state.  need to write intializing versions
-  //setSquareDataFromJson(squareDataTest1);
-  //setHighlightDataFromJson(highlightDataTest1);
-
-  function setHighlightDataFromJson(JsonData) {
-    let highlight_array = new Array();
-    let layout_array = new Array();
-
-    for (let index = 0; index < Object.keys(JsonData).length; index++) {
-      const element = JsonData[index];
-      const highlight = new highlightDataClass();
-      highlight.x = element.x;
-      highlight.y = element.y;
-      highlight.w = element.w;
-      highlight.h = element.h;
-      highlight.id = element.id;
-      highlight.type = element.type;
-
-      highlight_array.push(highlight);
-
-      //now make the layout
-      layout_array.push({
-        x: parseInt(highlight.x),
-        y: parseInt(highlight.y),
-        w: parseInt(highlight.w),
-        h: parseInt(highlight.h),
-        i: highlight.id.toString(),
-      });
-    }
-    setState({
-      hightlightData: highlight_array,
-      layoutHighlights: layout_array,
-    });
-  }
-
   // https://stackoverflow.com/questions/53574614/multiple-calls-to-state-updater-from-usestate-in-component-causes-multiple-re-re
-
-  function setSquareDataFromJson(JsonData) {
-    let squares_array = new Array();
-    let layout_array = new Array();
-    for (let index = 0; index < Object.keys(JsonData).length; index++) {
-      const element = JsonData[index];
-      const square = new squareDataClass();
-      square.value = element.value;
-      square.value_correct = element.value_correct;
-      square.value_start = element.value_start;
-      square.id = element.id;
-      square.row = element.row;
-      square.col = element.col;
-
-      square.square_click_handler = handleClick;
-      square.handleFocusAway = handleFocusAway;
-      squares_array.push(square);
-
-      //now make the layout
-      layout_array.push({
-        x: parseInt(square.col),
-        y: parseInt(square.row),
-        w: 1,
-        h: 1,
-        i: square.id.toString(),
-      });
-    }
-    setState({ squareData: squares_array, layoutSquares: layout_array });
-  }
 
   const [state, setState] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -403,14 +332,33 @@ function GameManagerFunctional({
   }
 
   function handleSetState1() {
-    setState({ squareData: null });
+    const square_data_init = intializeSquareData(squareDataTest1);
+    setState({
+      squareData: intializeSquareData(squareDataTest1),
+      highlightData: intializeHighlightData(highlightDataTest1),
+      keypress: "",
+      layoutSquares: intializeLayoutSquares(squareDataTest1),
+      layoutHighlights: intializeLayoutHighlights(highlightDataTest1),
+    });
+
+    handleResetBoardValues({ ...square_data_init }, squareDataTest1);
   }
   function handleSetState2() {
-    setState({ squareData: null });
+    // make state 2 match
+    const square_data_init = intializeSquareData(squareDataTest2);
+    setState({
+      squareData: square_data_init,
+      highlightData: intializeHighlightData(highlightDataTest2),
+      keypress: "",
+      layoutSquares: intializeLayoutSquares(squareDataTest2),
+      layoutHighlights: intializeLayoutHighlights(highlightDataTest2),
+    });
+
+    handleResetBoardValues({ ...square_data_init }, squareDataTest2);
   }
 
-  function handleResetBoardValues() {
-    let copy_squares = { ...state.squareData };
+  function handleResetBoardValues(copy_squares, JSONData) {
+    console.log(JSONData);
     for (
       let square_index = 0;
       square_index < Object.keys(copy_squares).length;
@@ -418,6 +366,16 @@ function GameManagerFunctional({
     ) {
       // loop through the squares
       copy_squares[square_index].value = null;
+
+      copy_squares[square_index].value_start =
+        JSONData[square_index].value_start;
+
+      copy_squares[square_index].value_correct =
+        JSONData[square_index].value_correct;
+
+      copy_squares[square_index].isSelected = false;
+      copy_squares[square_index].isInHighlight = false;
+      copy_squares[square_index].showSolution = false;
     }
     setState({ squareData: copy_squares });
   }
@@ -456,13 +414,15 @@ function GameManagerFunctional({
           </div>
         </div>
         <div className="container" id="app">
-          <MyFirstGridFunctional
-            squareData={state.squareData}
-            highlightData={state.highlightData}
-            layoutSquares={state.layoutSquares}
-            layoutHighlights={state.layoutHighlights}
-            showSolution={state.showSolution} //remove this later
-          />
+          {
+            <MyFirstGridFunctional
+              squareData={state.squareData}
+              highlightData={state.highlightData}
+              layoutSquares={state.layoutSquares}
+              layoutHighlights={state.layoutHighlights}
+              showSolution={state.showSolution} //remove this later
+            />
+          }
         </div>
         <Button onClick={handleSetState1}>set state 1</Button>
         <Button onClick={handleSetState2}>set state 2</Button>
@@ -498,102 +458,6 @@ root.render(
     />
   </React.StrictMode>
 );
-
-//OLD GAME MANAGER STARTS HERE _____________________
-//_________________________________________________
-//_________________________________________________
-//_________________________________________________
-//_________________________________________________
-
-// class GameManager extends React.PureComponent {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       squareData: this.props.squareData,
-//       highlightData: this.props.highlightData,
-//       showSolution: false,
-//     };
-
-//     this.handleSetState1 = this.handleSetState1.bind(this);
-//     this.handleSetState2 = this.handleSetState2.bind(this);
-//     this.handleClearBoard = this.handleClearBoard.bind(this);
-//     this.handleShowSolution = this.handleShowSolution.bind(this);
-//   }
-
-//   handleClearBoard() {
-//     this.setState({ squareData: [] });
-//   }
-//   handleSetState1() {
-//     this.setState({ squareData: this.props.squareData });
-//   }
-//   handleSetState2() {
-//     this.setState({ squareData: this.props.squareData2 });
-//   }
-
-//   handleShowSolution() {
-//     this.setState({ showSolution: !this.state.showSolution });
-//   }
-
-//   render() {
-//     //  console.log("rerender main component");
-//     return (
-//       <div className="App">
-//         <nav className="navbar">
-//           <div className="container">
-//             <div className="logo">Latin Squares</div>
-//             <ul className="nav">
-//               <li>
-//                 <a href="#">Home</a>
-//               </li>
-//               <li>
-//                 <a href="#">About</a>
-//               </li>
-//               <li>
-//                 <a href="#">Contact</a>
-//               </li>
-//             </ul>
-//           </div>
-//         </nav>
-
-//         <header className="header">
-//           <div className="container">
-//             <div>
-//               <h1>ReactDoku</h1>
-//               <p>
-//                 A crazy game of Latin Square Sudoku that I barely understand.
-//                 Built in React by James and Dale at The Recurse Center
-//               </p>
-//             </div>
-//           </div>
-//           <div className="container" id="app">
-//             <MyFirstGridFunctional
-//               testing={false}
-//               squareData={this.state.squareData}
-//               highlightData={this.state.highlightData}
-//               showSolution={this.state.showSolution}
-//             />
-//           </div>
-//           <Button onClick={this.handleSetState1}>set state 1</Button>
-//           <Button onClick={this.handleSetState2}>set state 2</Button>
-//           <Button onClick={this.handleClearBoard}>clear board</Button>
-//           <Button onClick={this.handleShowSolution}>Show Solutions</Button>
-//         </header>
-
-//         <section className="boxes">
-//           <div className="container">
-//             <div className="box-footer">
-//               <h2>
-//                 <i className="fas fa-mobile"></i>How to play
-//               </h2>
-//               <p>This could be some instructions about how to play the game!</p>
-//             </div>
-//           </div>
-//         </section>
-//       </div>
-//     );
-//   }
-// }
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
