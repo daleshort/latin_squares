@@ -341,7 +341,7 @@ function GameManagerFunctional({
       layoutHighlights: intializeLayoutHighlights(highlightDataTest1),
     });
 
-    handleResetBoardValues({ ...square_data_init }, squareDataTest1);
+    handleResetBoardValues();
   }
   function handleSetState2() {
     // make state 2 match
@@ -354,11 +354,11 @@ function GameManagerFunctional({
       layoutHighlights: intializeLayoutHighlights(highlightDataTest2),
     });
 
-    handleResetBoardValues({ ...square_data_init }, squareDataTest2);
+    handleResetBoardValues();
   }
 
-  function handleResetBoardValues(copy_squares, JSONData) {
-    console.log(JSONData);
+  function handleResetBoardValues() {
+    let copy_squares = { ...state.squareData };
     for (
       let square_index = 0;
       square_index < Object.keys(copy_squares).length;
@@ -366,16 +366,6 @@ function GameManagerFunctional({
     ) {
       // loop through the squares
       copy_squares[square_index].value = null;
-
-      copy_squares[square_index].value_start =
-        JSONData[square_index].value_start;
-
-      copy_squares[square_index].value_correct =
-        JSONData[square_index].value_correct;
-
-      copy_squares[square_index].isSelected = false;
-      copy_squares[square_index].isInHighlight = false;
-      copy_squares[square_index].showSolution = false;
     }
     setState({ squareData: copy_squares });
   }
