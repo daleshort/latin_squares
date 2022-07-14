@@ -88,10 +88,6 @@ class Board:
         self.col = col
         self.regions = regions
 
-# The route() function of the Flask class is a decorator,
-# which tells the application which URL should call
-# the associated function.
-@app.route('/GetPuzzle')
 # ‘/’ URL is bound with MakePuzzle() function.
 def MakePuzzle(WhatIsLatin:Board = Board((1,6),(6,1),[(2,3),(3,2)])) -> str:
     # Let's define the list of things to be latin so we can reuse it.
@@ -160,6 +156,21 @@ def MakePuzzle(WhatIsLatin:Board = Board((1,6),(6,1),[(2,3),(3,2)])) -> str:
     jsonStr = json.dumps([ob.__dict__ for ob in ListOfCells])
 
     return jsonStr
+
+# The route() function of the Flask class is a decorator,
+# which tells the application which URL should call
+# the associated function.
+@app.route('/GetPuzzle')
+def MakeOrder6():
+    return MakePuzzle(Board((1,6),(6,1),[(2,3),(3,2)]))
+
+@app.route('/GetPuzzle8')
+def MakeOrder8():
+    return MakePuzzle(Board((1,8),(8,1),[(2,4),(4,2)]))
+
+@app.route('/GetPuzzle10')
+def MakeOrder10():
+    return MakePuzzle(Board((1,10),(10,1),[(2,5),(5,2)]))
 
 # main driver function
 if __name__ == '__main__':
