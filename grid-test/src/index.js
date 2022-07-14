@@ -70,7 +70,7 @@ function GameManagerFunctional({
             same_col_index + 1
           );
         }
-        console.log("indicies is", same_row_indices);
+
         //concat onto copy hints any values that match the
         //test of having an index that matches the list of indicies
         copy_hints = copy_hints.concat(
@@ -92,8 +92,6 @@ function GameManagerFunctional({
             })
             .filter((value) => value != null)
         );
-
-        console.log("same row and col hints", copy_hints);
 
         const x_square = copy_col_array[index];
         const y_square = copy_row_array[index];
@@ -135,18 +133,22 @@ function GameManagerFunctional({
 
                 if (square_is_in_x_highlight && square_is_in_y_highlight) {
                   //if square is in highlight push the value to hints
-                  const hint_val = null;
+                  let hint_val = null;
 
                   if (copy_value_array[i] != null) {
-                    copy_hints.push(
-                      copy_value_array[i].toString() +
-                        "_" +
-                        index_highlight.toString()
-                    );
+                    hint_val = copy_value_array[i];
                     //NEED TO ADD TO ABOVE GETTING VALUE STARTS IF VALUE IS NULL
+                  } else if (state.value_start_array[i] != null) {
+                    hint_val = state.value_start_array[i];
                   }
 
-                  //add create string here
+                  if (hint_val != null) {
+                    copy_hints.push(
+                      hint_val.toString()
+                      // hint_val.toString() + "_" + index_highlight.toString()
+                    );
+                    //add create string here
+                  }
 
                   return true;
                 } else {
@@ -162,11 +164,17 @@ function GameManagerFunctional({
         copy_isSelected_array[index] = false;
       }
     }
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    copy_hints = copy_hints.filter(onlyUnique);
 
     console.log("copy hints at end of loop", copy_hints);
 
     setState({
       isSelected_array: copy_isSelected_array,
+      textEntryisSelected_array: copy_isSelected_array, //this is a deliberate reuse of is selected array to set the text entry focus
       highlight_isHighlighted: copy_highlight_isHighlighted,
       isInHighlight_array: copy_isInHighlight_array,
       hints: copy_hints,
@@ -177,24 +185,22 @@ function GameManagerFunctional({
   // https://stackoverflow.com/questions/55565444/how-to-register-event-with-useeffect-hooks
   function handleUserKeyPress(event) {
     let copy_value_array = state.value_array.concat();
-    let copy_isSelected_array = state.isSelected_array.concat();
-
-    console.log("key press", event.key);
-    console.log("state", state);
-    copy_isSelected_array.map((element, index) => {
-      console.log("index is", index);
+    let copy_textEntryisSelected_array =
+      state.textEntryisSelected_array.concat();
+    console.log("key press is", event.key);
+    copy_textEntryisSelected_array.map((element, index) => {
       if (element == true) {
-        if ("1234567890".includes(event.key)) {
+        if (generatePossibleValues().includes(parseInt(event.key))) {
           copy_value_array[index] = event.key;
         } else {
           copy_value_array[index] = "";
         }
       }
     });
-    console.log("copy value array", copy_value_array);
+
     setState({
       value_array: copy_value_array,
-      isSelected_array: copy_isSelected_array,
+      //  isSelected_array: copy_isSelected_array,
     });
   }
 
@@ -206,15 +212,10 @@ function GameManagerFunctional({
   }, [handleUserKeyPress]);
 
   function handleFocusAway(square) {
-    let copy_isSelected_array = state.isSelected_array.concat();
-    let copy_highlight_isHighlighted = state.highlight_isHighlighted.concat();
-
-    copy_isSelected_array.fill(false);
-    copy_highlight_isHighlighted.fill(false);
-
     setState({
-      isSelected_array: copy_isSelected_array,
-      highlight_isHighlighted: copy_highlight_isHighlighted,
+      textEntryisSelected_array: state.textEntryisSelected_array
+        .concat()
+        .fill(false),
     });
   }
 
@@ -234,6 +235,7 @@ function GameManagerFunctional({
       row_array: [],
       col_array: [],
       isSelected_array: [],
+      textEntryisSelected_array: [],
       isInHighlight_array: [],
       highlight_x: [],
       highlight_y: [],
@@ -246,6 +248,8 @@ function GameManagerFunctional({
       square_click_handler: null,
       handleFocusAway: null,
       showSolution: false,
+      order: null,
+      hardMode: false,
     }
   );
 
@@ -263,6 +267,7 @@ function GameManagerFunctional({
     let col_array = new Array();
     let isSelected_array = new Array();
     let isInHighlight_array = new Array();
+    let textEntryisSelected = new Array();
 
     for (let index = 0; index < Object.keys(JsonData).length; index++) {
       const element = JsonData[index];
@@ -274,6 +279,7 @@ function GameManagerFunctional({
       row_array.push(element.row);
       col_array.push(element.col);
       isSelected_array.push(false);
+      textEntryisSelected.push(false);
       isInHighlight_array.push(false);
     }
 
@@ -285,6 +291,7 @@ function GameManagerFunctional({
       col_array: col_array,
       row_array: row_array,
       isSelected_array: isSelected_array,
+      textEntryisSelected_array: textEntryisSelected,
       isInHighlight_array: isInHighlight_array,
       hints: [],
     });
@@ -298,6 +305,7 @@ function GameManagerFunctional({
     let highlight_id = new Array();
     let highlight_type = new Array();
     let highlight_isHighlighted = new Array();
+    let order = null;
 
     for (let index = 0; index < Object.keys(JsonData).length; index++) {
       const element = JsonData[index];
@@ -309,6 +317,11 @@ function GameManagerFunctional({
       highlight_type.push(element.type);
       highlight_isHighlighted.push(false);
     }
+    if (highlight_w.length >= 1) {
+      order = highlight_w[0] * highlight_h[0];
+      console.log("order", order);
+    }
+
     setState({
       highlight_x: highlight_x,
       highlight_y: highlight_y,
@@ -317,6 +330,7 @@ function GameManagerFunctional({
       highlight_id: highlight_id,
       highlight_type: highlight_type,
       highlight_isHighlighted: highlight_isHighlighted,
+      order: order,
     });
   }
 
@@ -348,6 +362,55 @@ function GameManagerFunctional({
 
   function handleShowSolution() {
     setState({ showSolution: !state.showSolution });
+  }
+
+  function handleEasyButton(value) {
+    let copy_value_array = state.value_array.concat();
+    let copy_isSelected_array = state.isSelected_array.concat();
+    copy_value_array[copy_isSelected_array.indexOf(true)] = value;
+    setState({
+      value_array: copy_value_array,
+    });
+  }
+
+  function generatePossibleButtons() {
+    let possibleValues = Array.from({ length: state.order }, (_, i) => i + 1);
+    if (state.hardMode == false) {
+      possibleValues = possibleValues.filter((x, i) => {
+        if (!state.hints.includes(x.toString())) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+    return possibleValues.map((x, i) => {
+      return (
+        <button
+          onClick={() => {
+            handleEasyButton(x);
+          }}
+          key={i + "pb"}
+        >
+          {x}
+        </button>
+      );
+    });
+  }
+
+  function generatePossibleValues() {
+    let possibleValues = Array.from({ length: state.order }, (_, i) => i + 1);
+    if (state.hardMode == false) {
+      possibleValues = possibleValues.filter((x, i) => {
+        if (!state.hints.includes(x.toString())) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+    console.log("possible buttons", possibleValues);
+    return possibleValues;
   }
 
   function generateHighlightDOM() {
@@ -386,22 +449,24 @@ function GameManagerFunctional({
   }
 
   function setButtonClassName(i) {
+    let button_class_name = null;
+
     if (state.value_start_array[i] !== null) {
-      return "gridbox-locked";
+      button_class_name = "gridbox-locked";
     } else if (state.showSolution === true) {
       if (state.value_array[i] == state.value_correct_array[i]) {
-        return "gridbox-solutionCorrect";
+        button_class_name = "gridbox-solutionCorrect";
       } else {
-        return "gridbox-solutionNotCorrect";
+        button_class_name = "gridbox-solutionNotCorrect";
       }
     } else if (state.isSelected_array[i] == true) {
-      return "gridbox";
+      button_class_name = "gridbox";
     } else if (state.isInHighlight_array[i] == true) {
-      console.log("setting to in highlight");
-      return "gridbox-isInHighlight";
+      button_class_name = "gridbox-isInHighlight";
     } else {
-      return "gridbox";
+      button_class_name = "gridbox";
     }
+    return button_class_name;
   }
 
   function generateDOM() {
@@ -482,6 +547,7 @@ function GameManagerFunctional({
         {/* <button onClick={handleClearBoard}>clear board</button>*/}
         <button onClick={handleShowSolution}>Show Solutions</button>
         <button onClick={handleResetBoardValues}>Clear Board Values</button>
+        {generatePossibleButtons()}
       </header>
 
       <section className="boxes">
