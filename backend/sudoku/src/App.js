@@ -8,7 +8,7 @@ function App() {
       setCurrentPuzzle(JSON.stringify(data));
     });
     return(
-      console.log('Getting a new board!')
+      console.log('Getting a new board of size 6!')
       // alert(currentPuzzle)
       )
   }
@@ -18,7 +18,7 @@ function App() {
       setCurrentPuzzle(JSON.stringify(data));
     });
     return(
-      console.log('Getting a new board!')
+      console.log('Getting a new board of size 8!')
       // alert(currentPuzzle)
       )
   }
@@ -28,7 +28,7 @@ function App() {
       setCurrentPuzzle(JSON.stringify(data));
     });
     return(
-      console.log('Getting a new board!')
+      console.log('Getting a new board of size 10!')
       // alert(currentPuzzle)
       )
   }
