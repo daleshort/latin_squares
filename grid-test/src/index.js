@@ -22,58 +22,12 @@ function GameManagerFunctional({
 }) {
   //click support_________________________
 
-  // function setInHighlight(my_highlightData, my_squares) {
-  //   for (
-  //     let square_index = 0;
-  //     square_index < Object.keys(my_squares).length;
-  //     square_index++
-  //   ) {
-  //     // loop through the squares
-  //     my_squares[square_index].isInHighlight = false;
-  //   }
-
-  //   for (let index = 0; index < Object.keys(my_highlightData).length; index++) {
-  //     //loop through the highlights
-  //     let my_highlight = my_highlightData[index];
-
-  //     //if a square is highlighted
-  //     if (my_highlight.isHighlighted == true) {
-  //       for (
-  //         let square_index = 0;
-  //         square_index < Object.keys(my_squares).length;
-  //         square_index++
-  //       ) {
-  //         // loop through the squares
-  //         let square = { ...my_squares[square_index] };
-  //         const check_x = inRange(
-  //           square.col,
-  //           my_highlight.x,
-  //           my_highlight.x + my_highlight.w - 1
-  //         );
-  //         const check_y = inRange(
-  //           square.row,
-  //           my_highlight.y,
-  //           my_highlight.y + my_highlight.h - 1
-  //         );
-  //         //if it is in the range set the highlight
-  //         if (check_x && check_y) {
-  //           square.isInHighlight = true;
-  //         } else {
-  //           //  square.isInHighlight = false;
-  //         }
-  //         //update the square
-  //         my_squares[square_index] = square;
-  //       }
-  //     }
-  //   }
-  //   return my_squares;
-  // }
-
   function inRange(number, min, max) {
     return number >= min && number <= max;
   }
 
   function handleClick(square_id) {
+    let copy_value_array = state.value_array;
     let copy_id_array = state.id_array.concat();
     let copy_row_array = state.row_array.concat();
     let copy_col_array = state.col_array.concat();
@@ -84,18 +38,62 @@ function GameManagerFunctional({
     let copy_highlight_w = state.highlight_w.concat();
     let copy_highlight_h = state.highlight_h.concat();
     let copy_highlight_isHighlighted = state.highlight_isHighlighted.concat();
-
-    console.log("click from square", square_id);
-    console.log("state of isSelected Array in", copy_isSelected_array);
+    let copy_hints = new Array();
+    // intialize in highlight array to false
+    copy_isInHighlight_array.fill(false);
 
     //a click comes in
     //we look through the grid array to find the matching grid square
 
     for (let index = 0; index < copy_id_array.length; index++) {
-      console.log("if square id ", square_id, "equals :", copy_id_array[index]);
+      //if the id of the square clicked matches the id at the index
       if (square_id == copy_id_array[index]) {
         copy_isSelected_array[index] = true;
-        console.log("made it into the loop");
+
+        //get the indexes of everything with the same row
+        const same_row_indices = [];
+        let same_row_index = state.row_array.indexOf(state.row_array[index]);
+        while (same_row_index != -1) {
+          same_row_indices.push(same_row_index);
+          same_row_index = state.row_array.indexOf(
+            state.row_array[index],
+            same_row_index + 1
+          );
+        }
+
+        const same_col_indices = [];
+        let same_col_index = state.col_array.indexOf(state.col_array[index]);
+        while (same_col_index != -1) {
+          same_col_indices.push(same_col_index);
+          same_col_index = state.col_array.indexOf(
+            state.col_array[index],
+            same_col_index + 1
+          );
+        }
+        console.log("indicies is", same_row_indices);
+        //concat onto copy hints any values that match the
+        //test of having an index that matches the list of indicies
+        copy_hints = copy_hints.concat(
+          copy_value_array
+            .map((x, index_square_test) => {
+              if (
+                same_row_indices.includes(index_square_test) ||
+                same_col_indices.includes(index_square_test)
+              ) {
+                // if the index is in the list
+                if (x != null) {
+                  return x.toString();
+                } else if (state.value_start_array[index_square_test] != null) {
+                  return state.value_start_array[index_square_test].toString();
+                } else {
+                  return null;
+                }
+              }
+            })
+            .filter((value) => value != null)
+        );
+
+        console.log("same row and col hints", copy_hints);
 
         const x_square = copy_col_array[index];
         const y_square = copy_row_array[index];
@@ -119,6 +117,43 @@ function GameManagerFunctional({
           );
           if (check_x && check_y) {
             copy_highlight_isHighlighted[index_highlight] = true;
+
+            //map across the is in highlight array testing every square each element
+            //for if it is in the highlight range
+            copy_isInHighlight_array = copy_isInHighlight_array.map(
+              (element, i) => {
+                const test_x = copy_col_array[i];
+                const test_y = copy_row_array[i];
+
+                const square_is_in_x_highlight =
+                  test_x >= highlight_x &&
+                  test_x <= highlight_x + highlight_w - 1;
+
+                const square_is_in_y_highlight =
+                  test_y >= highlight_y &&
+                  test_y <= highlight_y + highlight_h - 1;
+
+                if (square_is_in_x_highlight && square_is_in_y_highlight) {
+                  //if square is in highlight push the value to hints
+                  const hint_val = null;
+
+                  if (copy_value_array[i] != null) {
+                    copy_hints.push(
+                      copy_value_array[i].toString() +
+                        "_" +
+                        index_highlight.toString()
+                    );
+                    //NEED TO ADD TO ABOVE GETTING VALUE STARTS IF VALUE IS NULL
+                  }
+
+                  //add create string here
+
+                  return true;
+                } else {
+                  return element;
+                }
+              }
+            );
           } else {
             copy_highlight_isHighlighted[index_highlight] = false;
           }
@@ -127,11 +162,14 @@ function GameManagerFunctional({
         copy_isSelected_array[index] = false;
       }
     }
-    //need to add highlight the other squares in the highlight here
-    console.log("state of is selected out", copy_isSelected_array);
+
+    console.log("copy hints at end of loop", copy_hints);
+
     setState({
       isSelected_array: copy_isSelected_array,
-      //do not need to set ID array
+      highlight_isHighlighted: copy_highlight_isHighlighted,
+      isInHighlight_array: copy_isInHighlight_array,
+      hints: copy_hints,
     });
   }
 
@@ -204,6 +242,7 @@ function GameManagerFunctional({
       highlight_id: [],
       highlight_type: [],
       highlight_isHighlighted: [],
+      hints: [],
       square_click_handler: null,
       handleFocusAway: null,
       showSolution: false,
@@ -227,7 +266,7 @@ function GameManagerFunctional({
 
     for (let index = 0; index < Object.keys(JsonData).length; index++) {
       const element = JsonData[index];
-      console.log("element is ", element);
+
       value_array.push(element.value);
       value_correct_array.push(element.value_correct);
       value_start_array.push(element.value_start);
@@ -237,7 +276,7 @@ function GameManagerFunctional({
       isSelected_array.push(false);
       isInHighlight_array.push(false);
     }
-    console.log("squareData state", isSelected_array);
+
     setState({
       value_array: value_array,
       value_correct_array: value_correct_array,
@@ -247,6 +286,7 @@ function GameManagerFunctional({
       row_array: row_array,
       isSelected_array: isSelected_array,
       isInHighlight_array: isInHighlight_array,
+      hints: [],
     });
   }
 
@@ -357,6 +397,7 @@ function GameManagerFunctional({
     } else if (state.isSelected_array[i] == true) {
       return "gridbox";
     } else if (state.isInHighlight_array[i] == true) {
+      console.log("setting to in highlight");
       return "gridbox-isInHighlight";
     } else {
       return "gridbox";
