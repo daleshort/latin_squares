@@ -249,7 +249,7 @@ function GameManagerFunctional({
       handleFocusAway: null,
       showSolution: false,
       order: null,
-      hardMode: true,
+      hardMode: false,
     }
   );
 

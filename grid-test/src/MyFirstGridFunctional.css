@@ -20,12 +20,13 @@ code {
   border-radius: 4px;
   margin: 0;
   padding:0;
-  box-sizing: border-box;
+  box-sizing: content-box;
   color:rgb(0, 0, 0);
   font-size: large;
   width:6vh;
   height: 6vh;
   transition: all 200ms;
+  margin:3px;
   
   font-size: 4vh;
 }
