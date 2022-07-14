@@ -1,26 +1,21 @@
 
-.gridbox {
-
-  background-color: rgba(255, 255, 255, 0);
-  border: 2px solid rgba(0, 0, 0);
+body {
   margin: 0;
-  padding:0;
-  box-sizing: border-box;
-  color:white;
-  font-size: large;
-  width:40px;
-  height: 40px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: rgb(46, 46, 46);
 }
 
-.gridbox:focus{
-  background-color: rgba(255, 255, 255, 0.548);
-  color:black;
-  outline: none;
-} 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
 
-.gridbox-locked {
-
-  background-color: rgba(255, 255, 255, 0.2);
+.easyButton{
+  background-image: linear-gradient(#ffffffaf, #2a2a2aca);;
   border: 2px solid rgb(0, 0, 0);
   border-radius: 4px;
   margin: 0;
@@ -28,8 +23,61 @@
   box-sizing: border-box;
   color:rgb(0, 0, 0);
   font-size: large;
-  width:40px;
-  height: 40px;
+  width:6vh;
+  height: 6vh;
+  transition: all 200ms;
+  
+  font-size: 4vh;
+}
+.easyButton:hover{
+  background-color: rgba(255, 255, 255, 0.45);
+}
+.easyButton:active{
+  background-color:  rgba(2, 2, 2, 0.779)
+}
+.easyButton:active:after{
+  background-color:rgba(255, 255, 255, 0.45);
+}
+
+.gridbox {
+
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid rgba(0, 0, 0, 0.299);
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+  color:white;
+  font-size: 4vh;
+  width:100%;
+  height: 100%;
+  transition: all 200ms
+}
+
+.gridbox:focus{
+  background-color: rgba(255, 255, 255, 0.548);
+  color:black;
+  border-radius: 5%;
+  border: 2px solid rgba(0, 0, 0, 1);
+  outline: none;
+  font-size: 6vh;
+  transition: all 200ms
+} 
+
+
+
+.gridbox-locked {
+
+  background-image: linear-gradient(#ffffffaf, #2a2a2aca);
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 4px;
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+  color:rgb(0, 0, 0);
+  font-size: large;
+  width:100%;
+  height: 100%;
+  font-size: 4vh;
 
 }
 
@@ -41,9 +89,10 @@
   box-sizing: border-box;
   font-size: large;
   color:black;
-  width:40px;
-  height: 40px;
-
+  width:100%;
+  height: 100%;
+  font-size: 4vh;
+  transition: all 200ms
 }
 
 .box-primary {
@@ -52,6 +101,7 @@
   border: 6px solid #fda0006f;
   height: 100%;
   width: 100%;
+  transition: all 100ms;
   /* box-sizing: border-box; */
 }
 .box-primary-highlight {
@@ -60,6 +110,7 @@
   border: 6px solid #ff9900;
   height: 100%;
   width: 100%;
+  transition: all 100ms;
 
   /* box-sizing: border-box; */
 }
@@ -69,6 +120,7 @@
   border: 5px solid #00000088;
   height: 100%;
   width: 100%;
+  transition: all 100ms;
   /* box-sizing: border-box; */
 }
 .box-secondary-highlight {
@@ -77,27 +129,37 @@
   border: 5px solid #ffffff;
   height: 100%;
   width: 100%;
+  transition: all 100ms;
   /* box-sizing: border-box; */
 }
 
 
 .gridbox-solutionCorrect {
+  box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0);
   border: 2px solid rgb(51, 255, 0);
   border-radius: 100%;
   margin: 0;
   padding:0;
   color:white;
-  font-size: large;
+  font-size: 4vh;
+  width:100%;
+  height: 100%;
+  transition: all 200ms
 }
 .gridbox-solutionNotCorrect {
+  box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0);
   border: 2px solid rgb(255, 0, 0);
   border-radius: 100%;
   margin: 0;
   padding:0;
   color:white;
-  font-size: large;
+  font-size: 4vh;
+  width:100%;
+  height: 100%;
+  transition: all 200ms
+
 }
 
 .gridbox-locked:focus{
@@ -105,9 +167,8 @@
 } 
 
 .container#app{
-  background:rgb(40,40, 40);
-  min-height: 400px;
-  width: 400px;
+
+  display: flex;
   justify-content: center;
   align-items: center;
   vertical-align: center;
@@ -115,33 +176,15 @@
   padding-bottom: 20px;
   box-sizing: border-box;
   border-radius: 10px;
-}
+  min-height: 400px;
 
-
-
-
-/* .dokubox1{
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  color: black;
-  font-size: 90%;
-  text-align: center;
-  border-radius: 2px;
-  min-width: 100px;
-  min-height: 100px;
   
 }
-*/
 
 
-.gridlayout{
 
-  /* background-color: #1eb40d;
-  border: 2px solid #7806f2; */
-  margin: 0;
-  padding:0;
-  /* box-sizing: border-box; */
-}
+
+
 
 /* Adding in styles for page here */
 
@@ -227,7 +270,6 @@ ul {
 .header {
   background-color:rgb(46, 46, 46);;
   color: #fff;
-  min-height: 400px;
 }
 
 .header h1 {

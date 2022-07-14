@@ -249,7 +249,7 @@ function GameManagerFunctional({
       handleFocusAway: null,
       showSolution: false,
       order: null,
-      hardMode: false,
+      hardMode: true,
     }
   );
 
@@ -390,6 +390,7 @@ function GameManagerFunctional({
           onClick={() => {
             handleEasyButton(x);
           }}
+          className="easyButton"
           key={i + "pb"}
         >
           {x}
@@ -533,8 +534,12 @@ function GameManagerFunctional({
         <div className="container" id="app">
           {
             <Grid
-              rows="repeat(9,auto)" //sets grid-template-rows
-              columns="repeat(9,auto)"
+              rows={
+                "repeat(" + state.order + ",calc(50vh/" + state.order + "))"
+              }
+              columns={
+                "repeat(" + state.order + ",calc(50vh/" + state.order + "))"
+              }
               gap="0"
             >
               {generateHighlightDOM()}
