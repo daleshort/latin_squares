@@ -87,7 +87,7 @@ border-color: #21252900;
 .gameBox-item#easyButtons{
   margin: 10px;
   display:flex;
-  background: #1c1d1e;
+  background: #212529;
   border-radius: 10px;
   margin: 20px 10px;
   padding: 5px;
@@ -324,7 +324,7 @@ ul {
 
 
 .navbar {
-  background: #232323;
+  background:#212529;
   color: #fff;
   height: 60px;
 }
@@ -407,7 +407,7 @@ p a:hover {
 
 .box-footer {
   flex: 1;
-  background: #1c1d1e;
+  background: #212529;
   color: #fff;
   border-radius: 10px;
   margin: 20px 10px;
