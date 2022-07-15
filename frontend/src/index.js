@@ -11,6 +11,13 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
+// useEffect(() => {
+//   axios.get("/api/todos/")
+//     .then((res) => {
+//       setTodos(res.data)
+//     }).catch(() => { alert("somthing went wrong") })
+// }
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 let squareDataTest1 = require("./test_square_data.json");
