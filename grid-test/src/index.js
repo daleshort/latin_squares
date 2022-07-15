@@ -4,6 +4,13 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import "./MyFirstGridFunctional.css";
 import Grid from "@react-css/grid";
+import ToggleButton from "react-bootstrap/ToggleButton";
+import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 
 let squareDataTest1 = require("./test_square_data.json");
 let squareDataTest2 = require("./test_square_data2.json");
@@ -250,6 +257,8 @@ function GameManagerFunctional({
       showSolution: false,
       order: null,
       hardMode: false,
+      puzzleType: "2x3",
+      isLoading: false,
     }
   );
 
@@ -399,6 +408,27 @@ function GameManagerFunctional({
     });
   }
 
+  function simulateNetworkRequest() {
+    return new Promise((resolve) => setTimeout(resolve, 2000));
+  }
+
+  useEffect(() => {
+    if (state.isLoading) {
+      simulateNetworkRequest().then(() => {
+        setState({ isLoading: false });
+      });
+    }
+  }, [state.isLoading]);
+
+  function handleLoadPuzzle(type) {
+    console.log("simulate loading");
+    setState({ isLoading: true });
+  }
+
+  function setPuzzleType(type) {
+    setState({ puzzleType: type });
+  }
+
   function generatePossibleValues() {
     let possibleValues = Array.from({ length: state.order }, (_, i) => i + 1);
     if (state.hardMode == false) {
@@ -532,27 +562,109 @@ function GameManagerFunctional({
           </div>
         </div>
         <div className="container" id="app">
-          {
-            <Grid
-              rows={
-                "repeat(" + state.order + ",calc(50vh/" + state.order + "))"
-              }
-              columns={
-                "repeat(" + state.order + ",calc(50vh/" + state.order + "))"
-              }
-              gap="0"
-            >
-              {generateHighlightDOM()}
-              {generateDOM()}
-            </Grid>
-          }
+          <div className="gameBox">
+            <div>
+              <div className="gameBox-item" id="game">
+                {
+                  <Grid
+                    rows={
+                      "repeat(" +
+                      state.order +
+                      ",calc(50vh/" +
+                      state.order +
+                      "))"
+                    }
+                    columns={
+                      "repeat(" +
+                      state.order +
+                      ",calc(50vh/" +
+                      state.order +
+                      "))"
+                    }
+                    gap="0"
+                  >
+                    {generateHighlightDOM()}
+                    {generateDOM()}
+                  </Grid>
+                }
+              </div>
+              <div className="gameBox-item" id="easyButtons">
+                >{generatePossibleButtons()}
+              </div>
+            </div>
+            <div className="gameBox-item">
+              <div className="buttonBox">
+                <div className="buttonBox-item">
+                  <ToggleButton
+                    onChange={handleShowSolution}
+                    checked={state.showSolution}
+                    id="showSolutionButton"
+                    value={true}
+                    type="checkbox"
+                    variant="dark"
+                    size="lg"
+                  >
+                    Show Solution
+                  </ToggleButton>
+                </div>
+                <div className="buttonBox-item">
+                  {" "}
+                  <Button
+                    variant="dark"
+                    size="lg"
+                    onClick={handleResetBoardValues}
+                  >
+                    Clear
+                  </Button>
+                </div>
+                <div className="buttonBox-item">
+                  <Dropdown as={ButtonGroup}>
+                    <Button
+                      bsPrefix="button-dark-custom"
+                      size="lg"
+                      onClick={() => {
+                        handleLoadPuzzle(state.puzzleType);
+                      }}
+                    >
+                      {state.isLoading ? "Loading..." : "Load New Puzzle"}
+                    </Button>
+
+                    <Dropdown.Toggle
+                      split
+                      variant="dark"
+                      size="lg"
+                      id="dropdown-split-basic"
+                    />
+
+                    <Dropdown.Menu align="end" variant="dark" size="lg">
+                      <Dropdown.Item
+                        onClick={() => {
+                          setPuzzleType("2x3");
+                        }}
+                        variant="custom"
+                        id="2x3"
+                        eventKey={"2x3"}
+                        active={state.puzzleType == "2x3"}
+                      >
+                        2x3
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        id="4x3"
+                        eventKey={"4x3"}
+                        onClick={() => {
+                          setPuzzleType("4x3");
+                        }}
+                        active={state.puzzleType == "4x3"}
+                      >
+                        4x3
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <button onClick={handleSetState1}>set state 1</button>
-        <button onClick={handleSetState2}>set state 2</button>
-        {/* <button onClick={handleClearBoard}>clear board</button>*/}
-        <button onClick={handleShowSolution}>Show Solutions</button>
-        <button onClick={handleResetBoardValues}>Clear Board Values</button>
-        {generatePossibleButtons()}
       </header>
 
       <section className="boxes">
@@ -562,6 +674,12 @@ function GameManagerFunctional({
               <i className="fas fa-mobile"></i>How to play
             </h2>
             <p>This could be some instructions about how to play the game!</p>
+            <div>
+              <Button onClick={handleSetState1}>set state 1</Button>
+            </div>
+            <div>
+              <Button onClick={handleSetState2}>set state 2</Button>
+            </div>
           </div>
         </div>
       </section>
