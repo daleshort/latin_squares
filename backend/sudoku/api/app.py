@@ -6,10 +6,12 @@ import copy
 import random as rnd
 import json
 from typing import List, Tuple
+from flask_cors import CORS
 
 # Flask constructor takes the name of
 # current module (__name__) as argument.
 app = Flask(__name__)
+CORS(app)
 
 
 def solve_sudoku(sizes, grid):

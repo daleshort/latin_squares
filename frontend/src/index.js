@@ -10,13 +10,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-
-// useEffect(() => {
-//   axios.get("/api/todos/")
-//     .then((res) => {
-//       setTodos(res.data)
-//     }).catch(() => { alert("somthing went wrong") })
-// }
+import axios from "axios";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -426,9 +420,23 @@ function GameManagerFunctional({
 
   useEffect(() => {
     if (state.isLoading) {
-      simulateNetworkRequest().then(() => {
-        setState({ isLoading: false });
-      });
+      // useEffect(() => {
+      //   axios.get("/api/todos/")
+      //     .then((res) => {
+      //       setTodos(res.data)
+      //     }).catch(() => { alert("somthing went wrong") })
+      // }
+      axios
+        .get("http://localhost:8001/GetPuzzle")
+        .then((res) => {
+          console.log(res);
+          setState({ isLoading: false });
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("something went wrong");
+          setState({ isLoading: false });
+        });
     }
   }, [state.isLoading]);
 
