@@ -1,1 +1,5 @@
 my-app/src/some_crap.js
+node_modules
+.DS_Store
+venv
+__pycache__
