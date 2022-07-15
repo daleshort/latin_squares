@@ -621,34 +621,22 @@ function GameManagerFunctional({
             <div className="gameBox-item">
               <div className="buttonBox">
                 <div className="buttonBox-item">
-                  <ToggleButton
-                    onChange={handleShowSolution}
-                    checked={state.showSolution}
-                    id="showSolutionButton"
-                    value={true}
-                    type="checkbox"
-                    variant="dark"
-                    size="lg"
-                  >
-                    Show Solution
-                  </ToggleButton>
-                </div>
-                <div className="buttonBox-item">
-                  {" "}
                   <OverlayTrigger
                     placement="bottom"
                     delay={{ show: 100, hide: 200 }}
-                    overlay={renderTooltipClear}
+                    overlay={renderTooltipDelete}
                   >
                     <Button
-                      variant="dark"
+                      variant="danger"
                       size="lg"
-                      onClick={handleResetBoardValues}
+                      id="delete-button"
+                      onClick={() => {
+                        handleEasyButton(null);
+                      }}
                     >
-                      Clear
+                      &#68860;
                     </Button>
-                  </OverlayTrigger>
-                  {"  "}
+                  </OverlayTrigger>{" "}
                   <OverlayTrigger
                     placement="bottom"
                     delay={{ show: 100, hide: 200 }}
@@ -667,6 +655,34 @@ function GameManagerFunctional({
                       {state.hardMode ? "Hard Mode" : "Easy Mode"}
                     </ToggleButton>
                   </OverlayTrigger>
+                </div>
+                <div className="buttonBox-item">
+                  {" "}
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 100, hide: 200 }}
+                    overlay={renderTooltipClear}
+                  >
+                    <Button
+                      variant="dark"
+                      size="lg"
+                      onClick={handleResetBoardValues}
+                    >
+                      Clear
+                    </Button>
+                  </OverlayTrigger>
+                  {"  "}
+                  <ToggleButton
+                    onChange={handleShowSolution}
+                    checked={state.showSolution}
+                    id="showSolutionButton"
+                    value={true}
+                    type="checkbox"
+                    variant="dark"
+                    size="lg"
+                  >
+                    Show Solution
+                  </ToggleButton>
                 </div>
                 <div className="buttonBox-item">
                   <Dropdown as={ButtonGroup}>
@@ -717,24 +733,6 @@ function GameManagerFunctional({
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                </div>
-                <div className="buttonBox-item">
-                  <OverlayTrigger
-                    placement="bottom"
-                    delay={{ show: 100, hide: 200 }}
-                    overlay={renderTooltipDelete}
-                  >
-                    <Button
-                      variant="danger"
-                      size="lg"
-                      id="delete-button"
-                      onClick={() => {
-                        handleEasyButton(null);
-                      }}
-                    >
-                      &#68860;
-                    </Button>
-                  </OverlayTrigger>
                 </div>
               </div>
             </div>
