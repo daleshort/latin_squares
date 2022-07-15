@@ -31,23 +31,32 @@ code {
     -webkit-user-select: none;
     user-select: none;
     font-size: 1.25rem;
-    /* border-radius: 0.25rem; */
+    border-radius: 0.3rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 a#\32x3.active{
   background-color: #fdb60d61;
 }
-a#\34x3.active{
+a#\32x3:active{
   background-color: #fdb60d61;
 }
+
+a#\34x3.active{
+  background-color: #fdb50d9a;
+}
+
+a#\34x3:active{
+  background-color:#fdb50d9a;
+}
+
 
 
 .button-dark-custom:focus{
   background-color: #1c1f23;
   border-color: #21252900;
   box-shadow: 0 0 0 0.25rem rgb(66 70 73 / 50%);
-  /* box-shadow: 0 0 0 0.25rem rgb(66 70 73 / 50%); */
+  
 }
 
 .button-dark-custom:hover{
@@ -87,9 +96,13 @@ border-color: #21252900;
   font-size: xx-large;
   font-weight: 900;
   min-height: 68px;
+  min-width: 390px;
 
 }
 
+.btn#delete-button{
+  font-weight: bold;
+}
 
 .easyButton{
   background-image: linear-gradient(#ffffffaf, #2a2a2aca);;
@@ -128,7 +141,7 @@ border-color: #21252900;
   font-size: 4vh;
   width:100%;
   height: 100%;
-  transition: all 200ms
+  transition: all 200ms;
 }
 
 .gridbox:focus{
@@ -138,7 +151,7 @@ border-color: #21252900;
   border: 2px solid rgba(0, 0, 0, 1);
   outline: none;
   font-size: 6vh;
-  transition: all 200ms
+  transition: all 200ms;
 } 
 
 
@@ -330,6 +343,17 @@ ul {
 }
 
 .navbar a:hover {
+  color: lightblue;
+}
+
+p a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+p a:hover {
   color: lightblue;
 }
 

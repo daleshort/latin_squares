@@ -1,6 +1,5 @@
 import React, { useReducer, useCallback, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import "./MyFirstGridFunctional.css";
 import Grid from "@react-css/grid";
@@ -9,6 +8,8 @@ import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -369,6 +370,10 @@ function GameManagerFunctional({
     setState({ value_array: copy_squares });
   }
 
+  function handleSetHardMode() {
+    setState({ hardMode: !state.hardMode });
+  }
+
   function handleShowSolution() {
     setState({ showSolution: !state.showSolution });
   }
@@ -443,6 +448,28 @@ function GameManagerFunctional({
     console.log("possible buttons", possibleValues);
     return possibleValues;
   }
+
+  const renderTooltipHardMode = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      You will be able to enter any number in any square. No hints given.
+    </Tooltip>
+  );
+  const renderTooltipClear = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Reset all squares to empty.
+    </Tooltip>
+  );
+  const renderTooltipLoad = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Click the dropdown arrow to set puzzle dimensions.
+    </Tooltip>
+  );
+
+  const renderTooltipDelete = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Clear Cell
+    </Tooltip>
+  );
 
   function generateHighlightDOM() {
     if (state.highlight_id.length != 0) {
@@ -539,13 +566,7 @@ function GameManagerFunctional({
           <div className="logo">Latin Squares</div>
           <ul className="nav">
             <li>
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="#">About</a>
-            </li>
-            <li>
-              <a href="#">Contact</a>
+              <a href="https://github.com/daleshort/latin_squares">About</a>
             </li>
           </ul>
         </div>
@@ -557,7 +578,12 @@ function GameManagerFunctional({
             <h1>ReactDoku</h1>
             <p>
               A crazy game of Latin Square Sudoku that I barely understand.
-              Built in React by James and Dale at The Recurse Center
+              Built in React by{" "}
+              <a href="https://www2.cedarcrest.edu/academic/math/jmhammer/">
+                James
+              </a>{" "}
+              and <a href="https://mechied.com/">Dale</a> at{" "}
+              <a href="https://www.recurse.com/">The Recurse Center</a>
             </p>
           </div>
         </div>
@@ -609,25 +635,56 @@ function GameManagerFunctional({
                 </div>
                 <div className="buttonBox-item">
                   {" "}
-                  <Button
-                    variant="dark"
-                    size="lg"
-                    onClick={handleResetBoardValues}
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 100, hide: 200 }}
+                    overlay={renderTooltipClear}
                   >
-                    Clear
-                  </Button>
+                    <Button
+                      variant="dark"
+                      size="lg"
+                      onClick={handleResetBoardValues}
+                    >
+                      Clear
+                    </Button>
+                  </OverlayTrigger>
+                  {"  "}
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 100, hide: 200 }}
+                    overlay={renderTooltipHardMode}
+                  >
+                    <ToggleButton
+                      onChange={handleSetHardMode}
+                      checked={state.hardMode}
+                      id="hardmode"
+                      value={true}
+                      type="checkbox"
+                      variant={state.hardMode ? "dark" : "light"}
+                      size="lg"
+                    >
+                      {" "}
+                      {state.hardMode ? "Hard Mode" : "Easy Mode"}
+                    </ToggleButton>
+                  </OverlayTrigger>
                 </div>
                 <div className="buttonBox-item">
                   <Dropdown as={ButtonGroup}>
-                    <Button
-                      bsPrefix="button-dark-custom"
-                      size="lg"
-                      onClick={() => {
-                        handleLoadPuzzle(state.puzzleType);
-                      }}
+                    <OverlayTrigger
+                      placement="bottom"
+                      delay={{ show: 100, hide: 200 }}
+                      overlay={renderTooltipLoad}
                     >
-                      {state.isLoading ? "Loading..." : "Load New Puzzle"}
-                    </Button>
+                      <Button
+                        bsPrefix="button-dark-custom"
+                        size="lg"
+                        onClick={() => {
+                          handleLoadPuzzle(state.puzzleType);
+                        }}
+                      >
+                        {state.isLoading ? "Loading..." : "Load New Puzzle"}
+                      </Button>
+                    </OverlayTrigger>
 
                     <Dropdown.Toggle
                       split
@@ -661,6 +718,24 @@ function GameManagerFunctional({
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
+                <div className="buttonBox-item">
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 100, hide: 200 }}
+                    overlay={renderTooltipDelete}
+                  >
+                    <Button
+                      variant="danger"
+                      size="lg"
+                      id="delete-button"
+                      onClick={() => {
+                        handleEasyButton(null);
+                      }}
+                    >
+                      &#68860;
+                    </Button>
+                  </OverlayTrigger>
+                </div>
               </div>
             </div>
           </div>
@@ -673,7 +748,13 @@ function GameManagerFunctional({
             <h2>
               <i className="fas fa-mobile"></i>How to play
             </h2>
-            <p>This could be some instructions about how to play the game!</p>
+            <p>
+              Click on the board and type a number or click a number from the
+              suggestion box. Enter any key to clear the box. A number can only
+              be used once in a given row, column, primary (white) group, and
+              secondary (orange) group. In easy mode, the suggestion box only
+              contains values that meet the rules.
+            </p>
             <div>
               <Button onClick={handleSetState1}>set state 1</Button>
             </div>
