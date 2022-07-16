@@ -14,6 +14,8 @@ import axios from "axios";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+//cp -r /home/react-projects/latin_squares/frontend/build/* /var/www/html/sudokuapp
+
 let squareDataTest1 = require("./test_square_data.json");
 let squareDataTest2 = require("./test_square_data2.json");
 let highlightDataTest1 = require("./test_highlight_data.json");
