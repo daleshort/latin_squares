@@ -609,21 +609,21 @@ function GameManagerFunctional({
         </div>
         <div className="container" id="app">
           <div className="gameBox">
-            <div>
+            <div className="gameBox-item" id="board">
               <div className="gameBox-item" id="game">
                 {
                   <Grid
                     rows={
                       "repeat(" +
                       state.order +
-                      ",calc(50vh/" +
+                      ",calc(40vh/" +
                       state.order +
                       "))"
                     }
                     columns={
                       "repeat(" +
                       state.order +
-                      ",calc(50vh/" +
+                      ",calc(40vh/" +
                       state.order +
                       "))"
                     }
