@@ -775,12 +775,6 @@ function GameManagerFunctional({
               secondary (orange) group. In easy mode, the suggestion box only
               contains values that meet the rules.
             </p>
-            <div>
-              <Button onClick={handleSetState1}>set state 1</Button>
-            </div>
-            <div>
-              <Button onClick={handleSetState2}>set state 2</Button>
-            </div>
           </div>
         </div>
       </section>
