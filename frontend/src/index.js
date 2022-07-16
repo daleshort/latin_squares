@@ -267,6 +267,7 @@ function GameManagerFunctional({
   useEffect(() => {
     intializeSquareData(squareDataTest1);
     intializeHighlightData(highlightDataTest1);
+    console.log("highlight test data", highlightDataTest1);
   }, []);
 
   function intializeSquareData(JsonData) {
@@ -427,9 +428,11 @@ function GameManagerFunctional({
       //     }).catch(() => { alert("somthing went wrong") })
       // }
       axios
-        .get("http://localhost:8001/GetPuzzle")
+        .get("/sudoku/GetPuzzle")
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
+          intializeSquareData(res.data.squareData);
+          intializeHighlightData(res.data.highlightData);
           setState({ isLoading: false });
         })
         .catch((err) => {
@@ -441,7 +444,6 @@ function GameManagerFunctional({
   }, [state.isLoading]);
 
   function handleLoadPuzzle(type) {
-    console.log("simulate loading");
     setState({ isLoading: true });
   }
 
@@ -476,7 +478,8 @@ function GameManagerFunctional({
   );
   const renderTooltipLoad = (props) => (
     <Tooltip id="button-tooltip" {...props}>
-      Click the dropdown arrow to set puzzle dimensions.
+      Click the dropdown arrow to set puzzle dimensions. (2x3 currently only
+      option)
     </Tooltip>
   );
 
@@ -737,6 +740,8 @@ function GameManagerFunctional({
                         2x3
                       </Dropdown.Item>
                       <Dropdown.Item
+                        disabled
+                        // NOTE CURRENTLY SET TO DISABLED
                         id="4x3"
                         eventKey={"4x3"}
                         onClick={() => {

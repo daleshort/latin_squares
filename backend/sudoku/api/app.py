@@ -7,6 +7,14 @@ import random as rnd
 import json
 from typing import List, Tuple
 from flask_cors import CORS
+import os
+
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+f = open(os.path.join(__location__, 'test_highlight_data.json'))
+testHighlightData = json.load(f)
+f.close()
 
 # Flask constructor takes the name of
 # current module (__name__) as argument.
@@ -90,6 +98,10 @@ class Cell:
         self.value_start = value_start
         self.value_correct = value_correct
 
+    def to_dict(self):
+        return {"value": self.value, "id": self.id, "row": self.row, "col": self.col, "value_start": self.value_start, "value_correct": self.value_correct}
+
+
 # object with keyworks (row, column, Rectangular Regions)
 
 
@@ -166,29 +178,33 @@ def MakePuzzle(WhatIsLatin: Board = Board((1, 6), (6, 1), [(2, 3), (3, 2)])) -> 
         for j in range(len(UniquePuzzle)):
             idno += 1
             ListOfCells.append(Cell(
-                'null', idno, i, j, 'null' if UniquePuzzle[i][j] == 0 else UniquePuzzle[i][j], CorrectAnswer[i][j]))
+                None, idno, i, j, None if UniquePuzzle[i][j] == 0 else UniquePuzzle[i][j], CorrectAnswer[i][j]))
 
     # Write to JSON file
     jsonStr = json.dumps([ob.__dict__ for ob in ListOfCells])
 
-    return jsonStr
+    list_of_dict_cells = []
+    for cell in ListOfCells:
+        list_of_dict_cells.append(cell.to_dict())
+
+    return list_of_dict_cells
 
 # The route() function of the Flask class is a decorator,
 # which tells the application which URL should call
 # the associated function.
 
 
-@app.route('/GetPuzzle')
+@app.route('/sudoku/GetPuzzle')
 def MakeOrder6():
-    return MakePuzzle(Board((1, 6), (6, 1), [(2, 3), (3, 2)]))
+    return {'squareData': MakePuzzle(Board((1, 6), (6, 1), [(2, 3), (3, 2)])), 'highlightData': testHighlightData}
 
 
-@app.route('/GetPuzzle8')
+@app.route('/sudoku/GetPuzzle8')
 def MakeOrder8():
     return MakePuzzle(Board((1, 8), (8, 1), [(2, 4), (4, 2)]))
 
 
-@app.route('/GetPuzzle10')
+@app.route('/sudoku/GetPuzzle10')
 def MakeOrder10():
     return MakePuzzle(Board((1, 10), (10, 1), [(2, 5), (5, 2)]))
 
