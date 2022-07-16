@@ -150,7 +150,7 @@ def MakePuzzle(WhatIsLatin:Board = Board((1,6),(6,1),[(2,3),(3,2)])) -> str:
     for i in range(len(UniquePuzzle)):
         for j in range(len(UniquePuzzle)):
             idno += 1
-            ListOfCells.append(Cell('null',idno,i,j,'null' if UniquePuzzle[i][j] == 0 else UniquePuzzle[i][j],CorrectAnswer[i][j]))
+            ListOfCells.append(Cell(None,idno,i,j,None if UniquePuzzle[i][j] == 0 else UniquePuzzle[i][j],CorrectAnswer[i][j]))
 
     # Write to JSON file
     jsonStr = json.dumps([ob.__dict__ for ob in ListOfCells])
