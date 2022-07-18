@@ -2,7 +2,7 @@
   "name": "grid-test",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://64.227.29.102/sudokuapp",
+  "homepage": "/",
   "dependencies": {
     "@react-css/grid": "^1.5.1",
     "@testing-library/jest-dom": "^5.16.4",
@@ -24,6 +24,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-api": "cd api && venv/bin/flask run -h localhost -p 8001 --no-debugger",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

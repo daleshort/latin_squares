@@ -423,14 +423,8 @@ function GameManagerFunctional({
 
   useEffect(() => {
     if (state.isLoading) {
-      // useEffect(() => {
-      //   axios.get("/api/todos/")
-      //     .then((res) => {
-      //       setTodos(res.data)
-      //     }).catch(() => { alert("somthing went wrong") })
-      // }
       axios
-        .get("/sudoku/GetPuzzle")
+        .get("http://localhost:8001/GetPuzzle")
         .then((res) => {
           console.log(res.data);
           intializeSquareData(res.data.squareData);
